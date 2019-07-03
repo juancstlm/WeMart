@@ -1,8 +1,7 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import Header from "./header";
 import Footer from "./Footer";
-import { DynamoDB } from "aws-sdk/index";
 import {
   getDepartments
 } from "../services/api";

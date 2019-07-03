@@ -28,7 +28,7 @@ import {
 import { DynamoDB } from "aws-sdk/index";
 import NewCardForm from "./NewCardForm";
 import AWS from "aws-sdk";
-import {poolData} from "../services/api";
+import {poolData, dynamoDB as dynamodb} from "../services/api";
 
 let newAddressStyle = {
   textAlign: "center",
@@ -60,7 +60,6 @@ const pageTitle = {
   padding: "1.5rem",
   fontFamily: ' "Open Sans", "Helvetica Neue", Helvetica, sans-serif'
 };
-var dynamodb;
 var stripeKey;
 var cognitoUser;
 
@@ -111,14 +110,7 @@ class AccountSettings extends React.Component {
   }
 
   setKeys() {
-    dynamodb = new DynamoDB({
-      region: process.env.AWS_REGION,
-      credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-      }
-    });
-    stripeKey = process.env.STRIPE_API_KEY;
+    stripeKey = process.env.REACT_APP_STRIPE_API_KEY;
   }
 
   getCognitoUser() {
