@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import { StyleRoot } from "radium";
-import Fonts from "./Fonts";
+import Fonts from "./components/Fonts";
 import { BrowserRouter } from "react-router-dom";
-import Router from "./Router";
+import Router from "./components/Router";
 import { StripeProvider } from "react-stripe-elements";
 import { themer } from "ic-snacks";
 import { wemartTheme } from "./wemartTheme";
-import './App.css'
-
+import "./App.css";
 
 
 themer.themeConfig = wemartTheme; //IC-Snacks theme for WeMart

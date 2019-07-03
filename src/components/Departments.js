@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from "react-router-dom";
-import Header from './components/header';
-import Footer from './components/Footer';
+import Header from './header';
+import Footer from './Footer';
 import {DynamoDB} from "aws-sdk/index";
 
 class Departments extends Component {
@@ -19,7 +19,7 @@ class Departments extends Component {
 		// Get the dynamoDB database
 	    var dynamodb;
 	    if(process.env.NODE_ENV === 'development'){
-	        dynamodb = require('./db').db;
+	        dynamodb = require('../db').db;
 	    } else {
 	        dynamodb = new DynamoDB({
 	            region: "us-west-1",

@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
-import TextFileReader from './components/TextFileReader'
-import aboutus from './images/aboutus.jpg'
-import Header from './components/header';
-import Footer from './components/Footer';
+import TextFileReader from './TextFileReader'
+import aboutus from '../images/aboutus.jpg'
+import Header from './header';
+import Footer from './Footer';
 import Radium from 'radium';
 
 //Team Pictures
-import aayush from './images/Team/Aayush.jpg'
-import ian from './images/Team/Ian.jpg'
-import jonathan from './images/Team/Jonathan.jpg'
-import juan from './images/Team/Juan.jpg'
-import raj from './images/Team/Raj.JPG'
-import tim from './images/Team/Tim.jpg'
-import daanyaal from './images/Team/Daanyaal.jpg'
-import leo from './images/Team/Leo.png'
-import shayan from './images/Team/Shayan.png'
+import aayush from '../images/Team/Aayush.jpg'
+import ian from '../images/Team/Ian.jpg'
+import jonathan from '../images/Team/Jonathan.jpg'
+import juan from '../images/Team/Juan.jpg'
+import raj from '../images/Team/Raj.JPG'
+import tim from '../images/Team/Tim.jpg'
+import daanyaal from '../images/Team/Daanyaal.jpg'
+import leo from '../images/Team/Leo.png'
+import shayan from '../images/Team/Shayan.png'
 
 
 class AboutUs extends Component {
@@ -141,7 +141,7 @@ class AboutUs extends Component {
   render() {
     const  width  = this.state.width;
     const  height  = this.state.height;
-    var myTxt = require("./text/About.txt");
+    var myTxt = require("../text/About.txt");
 
     const title={
       width: "100%",

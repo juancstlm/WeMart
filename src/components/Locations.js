@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import TextFileReader from './components/TextFileReader'
-import location from './images/SanJose2.jpg'
-import Header from './components/header';
-import Footer from './components/Footer'
+import TextFileReader from './TextFileReader'
+import location from '../images/SanJose2.jpg'
+import Header from './header';
+import Footer from './Footer'
 
 class Locations extends Component {
   constructor(){
@@ -32,7 +32,7 @@ class Locations extends Component {
 
   render() {
     const  {width}  = this.state;
-    var myTxt = require("./text/Locations.txt");
+    var myTxt = require("../text/Locations.txt");
 
 
     const title={

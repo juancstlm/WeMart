@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Form, TextField } from 'ic-snacks';
-import background from './images/background.svg';
-import './App.css';
+import background from '../images/background.svg';
+import '../App.css';
 import { withRouter } from "react-router-dom";
-import wemartLogo from './images/logo.png'
+import wemartLogo from '../images/logo.png'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

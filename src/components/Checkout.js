@@ -1,6 +1,6 @@
 import React from "react";
 import { Elements } from "react-stripe-elements";
-import Header from "./components/header";
+import Header from "./header";
 import {
   Button,
   Form,
@@ -11,17 +11,17 @@ import {
   Select,
   TextField
 } from "ic-snacks";
-import CheckoutPanel from "./components/CheckoutPanel";
-import AddressCard from "./components/AddressCard";
+import CheckoutPanel from "./CheckoutPanel";
+import AddressCard from "./AddressCard";
 import { StyleRoot } from "radium";
-import CreditCard from "./components/CreditCard";
-import OrderItems from "./components/OrderItems";
+import CreditCard from "./CreditCard";
+import OrderItems from "./OrderItems";
 import { DynamoDB } from "aws-sdk/index";
 import PropTypes from "prop-types";
-import NewCardForm from "./components/NewCardForm";
+import NewCardForm from "./NewCardForm";
 import { CognitoUserPool } from "amazon-cognito-identity-js";
 import AWS from "aws-sdk";
-import Footer from "./components/Footer";
+import Footer from "./Footer";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -128,9 +128,9 @@ export default class Checkout extends React.Component {
 
   setKeys() {
     if (process.env.NODE_ENV === "development") {
-      dynamodb = require("./db").db;
-      poolData = require("./poolData").poolData;
-      stripeKey = require("./stripeKey").stripeAPIKey;
+      dynamodb = require("../db").db;
+      poolData = require("../poolData").poolData;
+      stripeKey = require("../stripeKey").stripeAPIKey;
     } else {
       dynamodb = new DynamoDB({
         region: "us-west-1",
@@ -326,7 +326,7 @@ export default class Checkout extends React.Component {
   setPaymentSources(email) {
     var lambda;
     if (process.env.NODE_ENV === "development") {
-      lambda = new AWS.Lambda(require("./db").lambda);
+      lambda = new AWS.Lambda(require("../db").lambda);
     } else {
       lambda = new AWS.Lambda({
         region: "us-west-1",
@@ -492,7 +492,7 @@ export default class Checkout extends React.Component {
   charge() {
     var lambda;
     if (process.env.NODE_ENV === "development") {
-      lambda = new AWS.Lambda(require("./db").lambda);
+      lambda = new AWS.Lambda(require("../db").lambda);
     } else {
       lambda = new AWS.Lambda({
         region: "us-west-1",

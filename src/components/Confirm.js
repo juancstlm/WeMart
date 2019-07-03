@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form, TextField } from 'ic-snacks';
-import background from './images/background.svg';
-import './App.css';
+import background from '../images/background.svg';
+import '../App.css';
 import { withRouter } from "react-router-dom";
 
 var AmazonCognitoIdentity = require('amazon-cognito-identity-js');
@@ -18,7 +18,7 @@ class Confirm extends Component {
 
     var poolData;
     if(process.env.NODE_ENV === 'development'){
-        poolData = require('./poolData').poolData;
+        poolData = require('../poolData').poolData;
     } else {
         poolData = {
         UserPoolId : process.env.REACT_APP_Auth_UserPoolId,

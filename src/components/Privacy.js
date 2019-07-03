@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import TextFileReader from './components/TextFileReader'
-import Header from './components/header';
-import Footer from './components/Footer'
+import TextFileReader from './TextFileReader'
+import Header from './header';
+import Footer from './Footer'
 
 class Privacy extends Component {
 
@@ -31,12 +31,12 @@ class Privacy extends Component {
 
 
   render() {
-    var Last = require("./text/Privacy/Last.txt");
-    var Info = require("./text/Privacy/Info.txt");
-    var How = require("./text/Privacy/How.txt");
-    var What = require("./text/Privacy/What.txt");
-    var Changes = require("./text/Privacy/Changes.txt");
-    var Cali = require("./text/Privacy/California.txt");
+    var Last = require("../text/Privacy/Last.txt");
+    var Info = require("../text/Privacy/Info.txt");
+    var How = require("../text/Privacy/How.txt");
+    var What = require("../text/Privacy/What.txt");
+    var Changes = require("../text/Privacy/Changes.txt");
+    var Cali = require("../text/Privacy/California.txt");
 
     const pageTitle={
       color: "white",

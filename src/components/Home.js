@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import HorizontalScroll from './components/HorizontalScroll';
-import Header from './components/header';
-import Footer from './components/Footer';
+import HorizontalScroll from './HorizontalScroll';
+import Header from './header';
+import Footer from './Footer';
 import { withRouter } from 'react-router-dom';
 import AWS from 'aws-sdk/index';
 import {DynamoDB} from 'aws-sdk/index';
 import {CognitoUserPool} from "amazon-cognito-identity-js";
-import itemsEmpty from './images/items_empty.png'
+import itemsEmpty from '../images/items_empty.png'
 
 var poolData;
 var dynamodb;
@@ -29,8 +29,8 @@ class Home extends Component {
 
   setKeys() {
     if(process.env.NODE_ENV === 'development'){
-            poolData =require('./poolData').poolData;
-            dynamodb = require('./db').db;
+            poolData =require('../poolData').poolData;
+            dynamodb = require('../db').db;
         } else{
             poolData = {
                 UserPoolId : process.env.REACT_APP_Auth_UserPoolId,

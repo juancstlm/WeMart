@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import TextFileReader from './components/TextFileReader'
-import Header from './components/header';
-import Footer from './components/Footer'
+import TextFileReader from './TextFileReader'
+import Header from './header';
+import Footer from './Footer'
 
 class Terms extends Component {
 
@@ -31,23 +31,23 @@ class Terms extends Component {
 
 
   render() {
-    var Last = require("./text/Terms/Last.txt");
-    var Use = require("./text/Terms/Use.txt");
-    var Comm = require("./text/Terms/Comm.txt");
-    var Coupons = require("./text/Terms/Coupons.txt");
-    var Alcohol = require("./text/Terms/Alcohol.txt");
-    var Third = require("./text/Terms/Third.txt");
-    var Service = require("./text/Terms/Service.txt");
-    var Limit = require("./text/Terms/Limit.txt");
-    var Indemn = require("./text/Terms/Indemn.txt");
-    var Dispute = require("./text/Terms/Dispute.txt");
-    var Termin = require("./text/Terms/Termin.txt");
-    var Control = require("./text/Terms/Control.txt");
-    var Entire = require("./text/Terms/Entire.txt");
-    var Waiver = require("./text/Terms/Waiver.txt");
-    var Assign = require("./text/Terms/Assign.txt");
-    var Changes = require("./text/Terms/Changes.txt");
-    var Copy = require("./text/Terms/Copy.txt");
+    var Last = require("../text/Terms/Last.txt");
+    var Use = require("../text/Terms/Use.txt");
+    var Comm = require("../text/Terms/Comm.txt");
+    var Coupons = require("../text/Terms/Coupons.txt");
+    var Alcohol = require("../text/Terms/Alcohol.txt");
+    var Third = require("../text/Terms/Third.txt");
+    var Service = require("../text/Terms/Service.txt");
+    var Limit = require("../text/Terms/Limit.txt");
+    var Indemn = require("../text/Terms/Indemn.txt");
+    var Dispute = require("../text/Terms/Dispute.txt");
+    var Termin = require("../text/Terms/Termin.txt");
+    var Control = require("../text/Terms/Control.txt");
+    var Entire = require("../text/Terms/Entire.txt");
+    var Waiver = require("../text/Terms/Waiver.txt");
+    var Assign = require("../text/Terms/Assign.txt");
+    var Changes = require("../text/Terms/Changes.txt");
+    var Copy = require("../text/Terms/Copy.txt");
 
 
 

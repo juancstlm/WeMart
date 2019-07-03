@@ -1,10 +1,10 @@
-import Header from './components/header';
-import Footer from './components/Footer';
+import Header from './header';
+import Footer from './Footer';
 import React, { Component } from 'react';
 import { withRouter } from "react-router-dom";
-import HorizontalScroll from './components/HorizontalScroll';
+import HorizontalScroll from './HorizontalScroll';
 import {DynamoDB} from "aws-sdk/index";
-import Counter from "./components/Counter";
+import Counter from "./Counter";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -49,7 +49,7 @@ class Item extends Component {
 
 	initializeDB() {
 		if(process.env.NODE_ENV === 'development'){
-	        dynamodb = require('./db').db;
+	        dynamodb = require('../db').db;
 	    } else {
 	        dynamodb = new DynamoDB({
 	            region: "us-west-1",
@@ -95,7 +95,7 @@ class Item extends Component {
 		// Get poolData
 	    var poolData;
 	    if(process.env.NODE_ENV === 'development'){
-	        poolData = require('./poolData').poolData;
+	        poolData = require('../poolData').poolData;
 	    } else {
 	      var poolData = {
 	        UserPoolId : process.env.REACT_APP_Auth_UserPoolId,

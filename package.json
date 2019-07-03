@@ -6,6 +6,7 @@
     "amazon-cognito-identity-js": "^2.0.3",
     "aws-amplify": "^0.2.14",
     "aws-sdk": "^2.482.0",
+    "dot-env": "0.0.1",
     "dotenv": "^8.0.0",
     "ic-snacks": "0.0.128",
     "prop-types": "^15.6.1",
