@@ -6,6 +6,7 @@
     "amazon-cognito-identity-js": "^2.0.3",
     "aws-amplify": "^0.2.14",
     "aws-sdk": "^2.482.0",
+    "dotenv": "^8.0.0",
     "ic-snacks": "0.0.127",
     "prop-types": "^15.6.1",
     "radium": "^0.22.1",
@@ -15,7 +16,7 @@
     "react-dom": "^16.3.0",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.1.1",
+    "react-scripts": "3.0.1",
     "react-stripe-elements": "^1.6.0",
     "react-toastify": "^4.0.0-rc.5",
     "react-transition-group": "^2.3.0",
@@ -31,5 +32,17 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
