@@ -1,106 +1,82 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
-import Header from './header';
-import Footer from './Footer';
-import {DynamoDB} from "aws-sdk/index";
+import Header from "./header";
+import Footer from "./Footer";
+import { DynamoDB } from "aws-sdk/index";
+import {
+  getDepartments
+} from "../services/api";
 
-class Departments extends Component {
+const Departments = ({ history }) => {
+  const [departments, setDepartments] = useState([]);
 
-	constructor(props) {
-		super(props)
+  useEffect(() => {
+    getDepartments().then(data => setDepartments(data));
+  }, []);
 
-		this.state = { departments: [] }
+  const renderDepartments = departments => {
+    console.log("departments funct", departments);
+    const gridItem = {
+      border: "1.5px solid gray",
+      borderRadius: "10px",
+      fontSize: "1.2em",
+      textAlign: "center",
+      marginBottom: "5vw",
+      height: "minmax(150px, 1fr)",
+      overflow: "hidden",
+      cursor: "pointer"
+    };
 
-		this.getDepartments()
-	}
+    // Inline sort by department name
+    let sorted = departments.sort((a, b) => {
+      return a.departmentid > b.departmentid
+        ? 1
+        : b.departmentid > a.departmentid
+        ? -1
+        : 0;
+    });
 
-	getDepartments() {
+    return sorted.map(dep => (
+      <div style={gridItem} onClick={() => handleClick(dep.departmentid)}>
+        <img
+          alt={dep.departmentid}
+          src={dep.image}
+          style={{
+            width: "80%",
+            marginLeft: "20%",
+            borderRadius: "0 10px 0 0"
+          }}
+        />
+        {dep.departmentid}
+      </div>
+    ));
+  };
 
-		// Get the dynamoDB database
-	    var dynamodb;
-	    if(process.env.NODE_ENV === 'development'){
-	        dynamodb = require('../db').db;
-	    } else {
-	        dynamodb = new DynamoDB({
-	            region: "us-west-1",
-	            credentials: {
-	                accessKeyId: process.env.REACT_APP_DB_accessKeyId,
-	                secretAccessKey: process.env.REACT_APP_DB_secretAccessKey},
-	        });
-	    }
+  const handleClick = depName => {
+    history.push({
+      pathname: "/search",
+      search: "?query=" + encodeURIComponent(depName) + "&special=true"
+    });
+  };
 
-	    var params = {
-	        TableName: "department"
-	    };
+  const gridContainer = {
+    display: "grid",
+    gridTemplateColumns: "repeat( auto-fit, minmax(150px, 1fr) )",
+    gridColumnGap: "5%",
+    margin: "5%",
+    marginBottom: "0",
+    width: "90%"
+  };
 
-	    var departments = [];
-	    dynamodb.scan(params, (err, data) => {
-	        if (err) {
-	        	alert(JSON.stringify(err))
-	        } else {
-	            data.Items.forEach((element) => {
-	            	departments.push({name: element.departmentid.S, image: element.image.S})
-	            });
-				this.setState({departments: departments})
-				console.log(departments)
-	        }
-	    });
-	}
+  return (
+    <div>
+      <Header />
+      <div id="pageBody">
+        <div style={gridContainer}>{renderDepartments(departments)}</div>
+      </div>
 
-	renderDepartments(departments) {
-		const gridItem = {
-		  border: '1.5px solid gray',
-		  borderRadius: '10px',
-		  fontSize: '1.2em',
-		  textAlign: 'center',
-		  marginBottom: '5vw',
-		  height: 'minmax(150px, 1fr)',
-		  overflow: 'hidden',
-		  cursor: 'pointer',
-		}
-
-		// Inline sort by department name
-		departments.sort(function(a,b) {return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);} );
-
-		return(departments.map((dep)=>
-			<div style={gridItem} onClick={() => this.handleClick(dep.name)} >
-				<img src={dep.image} style={{width: '80%', marginLeft:'20%', borderRadius: '0 10px 0 0'}} />
-			{dep.name}
-			</div>
-		))
-	}
-
-	handleClick(depName) {
-		this.props.history.push({
-          pathname: '/search',
-          search: '?query='+encodeURIComponent(depName)+'&special=true'
-        })
-	}
-
-	render() {
-
-		const gridContainer = {
-  			display: 'grid',
-  			gridTemplateColumns: 'repeat( auto-fit, minmax(150px, 1fr) )',
-  			gridColumnGap: '5%',
-  			margin: '5%',
-  			marginBottom: '0',
-  			width: '90%',
-		}
-
-		return(
-		<div>
-			<Header />
-
-			<div id="pageBody">
-				<div style={gridContainer}>
-				  {this.renderDepartments(this.state.departments)} 
-				</div>
-			</div>
-
-     		<Footer />
-		</div>
-		)
-	}
-}
+      <Footer />
+    </div>
+  );
+};
 export default withRouter(Departments);

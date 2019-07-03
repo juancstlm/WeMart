@@ -3,10 +3,10 @@
   "version": "0.1.2",
   "private": true,
   "dependencies": {
+    "@aws/dynamodb-auto-marshaller": "^0.7.1",
     "amazon-cognito-identity-js": "^2.0.3",
     "aws-amplify": "^0.2.14",
-    "aws-sdk": "^2.482.0",
-    "dot-env": "0.0.1",
+    "aws-sdk": "^2.488.0",
     "dotenv": "^8.0.0",
     "ic-snacks": "0.0.128",
     "prop-types": "^15.6.1",
