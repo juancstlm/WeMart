@@ -5,14 +5,13 @@ import { withRouter, Link } from "react-router-dom";
 import { DynamoDB } from "aws-sdk/index";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { poolData } from "../services/api";
+import { poolData, dynamoDB as dynamodb } from "../services/api";
 
 var AmazonCognitoIdentity = require("amazon-cognito-identity-js");
 
 var itemIds = [];
 var cognitoUser;
 var email;
-var dynamodb;
 
 class ShoppingList extends Component {
   constructor(props) {
@@ -24,7 +23,6 @@ class ShoppingList extends Component {
     };
 
     this.getCurrentUser();
-    this.initializeDB();
   }
 
   getCurrentUser() {
@@ -55,20 +53,6 @@ class ShoppingList extends Component {
             });
           }
         });
-      });
-    }
-  }
-
-  initializeDB() {
-    if (process.env.NODE_ENV === "development") {
-      dynamodb = require("../db").db;
-    } else {
-      dynamodb = new DynamoDB({
-        region: "us-west-1",
-        credentials: {
-          accessKeyId: process.env.REACT_APP_DB_accessKeyId,
-          secretAccessKey: process.env.REACT_APP_DB_secretAccessKey
-        }
       });
     }
   }

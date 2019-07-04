@@ -4,11 +4,8 @@ import { withRouter } from "react-router-dom";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group"; // ES6
 import "./header.css";
 import Cart from "./Cart";
-import {
-  CognitoUserAttribute,
-  CognitoUserPool
-} from "amazon-cognito-identity-js";
-import { Button, Icon } from "ic-snacks";
+import { Icon } from "ic-snacks";
+import {poolData} from "../services/api";
 
 //Styles
 const astext = {
@@ -160,15 +157,6 @@ class Header extends Component {
 
   getCurrentUser() {
     // Get poolData
-    var poolData;
-    if (process.env.NODE_ENV === "development") {
-      poolData = require("../poolData").poolData;
-    } else {
-      var poolData = {
-        UserPoolId: process.env.REACT_APP_Auth_UserPoolId,
-        ClientId: process.env.REACT_APP_Auth_ClientId
-      };
-    }
     var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
     cognitoUser = userPool.getCurrentUser();

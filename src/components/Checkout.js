@@ -5,9 +5,6 @@ import {
   Button,
   Form,
   MenuItem,
-  NavigationPills,
-  Radio,
-  RadioGroup,
   Select,
   TextField
 } from "ic-snacks";
@@ -16,8 +13,6 @@ import AddressCard from "./AddressCard";
 import { StyleRoot } from "radium";
 import CreditCard from "./CreditCard";
 import OrderItems from "./OrderItems";
-import { DynamoDB } from "aws-sdk/index";
-import PropTypes from "prop-types";
 import NewCardForm from "./NewCardForm";
 import { CognitoUserPool } from "amazon-cognito-identity-js";
 import AWS from "aws-sdk";
@@ -26,9 +21,9 @@ import Footer from "./Footer";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-var dynamodb;
-var poolData;
-var stripeKey;
+import {poolData, dynamoDB as dynamodb} from "../services/api";
+
+const stripeKey = process.env.REACT_APP_STRIPE_API_KEY;
 const tax = 0.0925;
 
 //STYLES
@@ -84,7 +79,6 @@ export default class Checkout extends React.Component {
       orderItems: [],
       source: null
     };
-    this.setKeys();
     this.getCognitoUser();
     this.getCartItems();
   }
@@ -126,26 +120,6 @@ export default class Checkout extends React.Component {
       render: "Something Went Wrong"
     });
 
-  setKeys() {
-    if (process.env.NODE_ENV === "development") {
-      dynamodb = require("../db").db;
-      poolData = require("../poolData").poolData;
-      stripeKey = require("../stripeKey").stripeAPIKey;
-    } else {
-      dynamodb = new DynamoDB({
-        region: "us-west-1",
-        credentials: {
-          accessKeyId: process.env.REACT_APP_DB_accessKeyId,
-          secretAccessKey: process.env.REACT_APP_DB_secretAccessKey
-        }
-      });
-      poolData = {
-        UserPoolId: process.env.REACT_APP_Auth_UserPoolId,
-        ClientId: process.env.REACT_APP_Auth_ClientId
-      };
-      stripeKey = process.env.REACT_APP_Stripe_Key;
-    }
-  }
 
   calculateTax(department, price) {
     const taxDepartments = ["Alcohol", "Household", "Personal Care", "Pets"];

@@ -51,7 +51,7 @@ const HorizontalScroll = (props) => {
     <div style={scrollWrapper}>
       <div style={scrollerTitle} >
         <span className="lead">{props.title}</span>
-        <button onClick={props.onSeeMoreClick} style={{float: 'right', background: 'none', border: 'none', paddingRight:'3%'}}>See more <i class="fas fa-chevron-right"/></button>
+        <button onClick={props.onSeeMoreClick} style={{float: 'right', background: 'none', border: 'none', paddingRight:'3%'}}>See more <i className="fas fa-chevron-right"/></button>
       </div>
       <div style={wrapper} > 
           {items}

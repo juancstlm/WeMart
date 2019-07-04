@@ -7,9 +7,8 @@ import itemsEmpty from "../images/items_empty.png";
 import { CognitoUserPool } from "amazon-cognito-identity-js";
 import { DynamoDB } from "aws-sdk";
 import ItemsGrid from "./ItemsGrid";
-import { poolData } from "../services/api";
+import { poolData, dynamoDB as dynamodb } from "../services/api";
 
-var dynamodb;
 var cognitoUser;
 //Styles
 const history = {
@@ -40,7 +39,6 @@ class History extends React.Component {
       isLoaded: false,
       user: null
     };
-    this.setKeys();
     this.getCognitoUser();
   }
 
@@ -361,20 +359,6 @@ class History extends React.Component {
         <Footer />
       </div>
     );
-  }
-
-  setKeys() {
-    if (process.env.NODE_ENV === "development") {
-      dynamodb = require("../db").db;
-    } else {
-      dynamodb = new DynamoDB({
-        region: "us-west-1",
-        credentials: {
-          accessKeyId: process.env.REACT_APP_DB_accessKeyId,
-          secretAccessKey: process.env.REACT_APP_DB_secretAccessKey
-        }
-      });
-    }
   }
 }
 
