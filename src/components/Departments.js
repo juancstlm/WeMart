@@ -2,30 +2,20 @@ import React, { useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import Header from "./header";
 import Footer from "./Footer";
-import {
-  getDepartments
-} from "../services/api";
+import { getDepartments } from "../services/api";
+import DepartmentCard from "./DepartmentCard";
+import PropTypes from "prop-types";
 
-const Departments = ({ history }) => {
-  const [departments, setDepartments] = useState([]);
+const Departments = ({ history, initialLoad }) => {
+  const [departments, setDepartments] = useState(
+    new Array(initialLoad).fill({ loading: true })
+  );
 
   useEffect(() => {
     getDepartments().then(data => setDepartments(data));
   }, []);
 
   const renderDepartments = departments => {
-    console.log("departments funct", departments);
-    const gridItem = {
-      border: "1.5px solid gray",
-      borderRadius: "10px",
-      fontSize: "1.2em",
-      textAlign: "center",
-      marginBottom: "5vw",
-      height: "minmax(150px, 1fr)",
-      overflow: "hidden",
-      cursor: "pointer"
-    };
-
     // Inline sort by department name
     let sorted = departments.sort((a, b) => {
       return a.departmentid > b.departmentid
@@ -36,18 +26,11 @@ const Departments = ({ history }) => {
     });
 
     return sorted.map(dep => (
-      <div style={gridItem} onClick={() => handleClick(dep.departmentid)}>
-        <img
-          alt={dep.departmentid}
-          src={dep.image}
-          style={{
-            width: "80%",
-            marginLeft: "20%",
-            borderRadius: "0 10px 0 0"
-          }}
-        />
-        {dep.departmentid}
-      </div>
+      <DepartmentCard
+        onClick={() => handleClick(dep.departmentid)}
+        department={dep}
+        loading={dep.loading}
+      />
     ));
   };
 
@@ -73,9 +56,16 @@ const Departments = ({ history }) => {
       <div id="pageBody">
         <div style={gridContainer}>{renderDepartments(departments)}</div>
       </div>
-
       <Footer />
     </div>
   );
 };
 export default withRouter(Departments);
+
+Departments.defaultProps = {
+  initialLoad: 10
+};
+
+Departments.propTypes = {
+  initialLoad: PropTypes.number
+};

@@ -9,7 +9,7 @@
     "aws-sdk": "^2.488.0",
     "dotenv": "^8.0.0",
     "ic-snacks": "0.0.128",
-    "prop-types": "^15.6.1",
+    "prop-types": "^15.7.2",
     "radium": "^0.22.1",
     "react": "^16.8.6",
     "react-addons-css-transition-group": "^15.6.2",
