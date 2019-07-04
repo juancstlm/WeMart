@@ -29,14 +29,8 @@ export default class ItemsGrid extends React.Component {
     return this.props.items.map(item => (
       <li style={itemGrid_itemCard} key={item.itemid}>
         <ItemCard
+          item={item}
           key={item.itemid}
-          itemid={item.itemid}
-          name={item.name}
-          image={item.image}
-          price={item.price}
-          quantity={item.quantity}
-          sale={item.sale}
-          departmentid={item.departmentid}
         />
       </li>
     ));
