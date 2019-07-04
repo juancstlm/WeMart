@@ -5,10 +5,12 @@ import { StyleRoot } from "radium";
 import Counter from "./Counter";
 import onSaleBadge from "../images/onSaleBadge.png";
 import { withRouter } from "react-router-dom";
+import { addToCart, removeFromCart } from "../redux/actions";
+import { connect } from "react-redux";
 
 //STYLES
 //Add To cart button Style
-const addToCart = { display: "inherit", margin: "0 0 auto", width: "100%" };
+const addToCartButton= { display: "inherit", margin: "0 0 auto", width: "100%" };
 
 //Item Card Styles
 const itemCard = { background: "#ffffff", width: "100%", marginBottom: "25px" };
@@ -86,6 +88,8 @@ class ItemCard extends React.Component {
       var cartString = localStorage.getItem("cart");
       var cart = JSON.parse(cartString);
       if (cart.hasOwnProperty(this.props.itemid)) {
+        console.log('Local storage cart', cart)
+        this.props.addToCart(cart[this.props.itemid])
         var quantityInCart = cart[this.props.itemid].quantityInCart;
         this.setState({
           quantityInCart: quantityInCart
@@ -152,7 +156,7 @@ class ItemCard extends React.Component {
         return (
           <div style={itemCard_buttonBar}>
             <Button
-              style={addToCart}
+              style={addToCartButton}
               snacksStyle="secondary"
               size="small"
               onClick={() => {
@@ -193,7 +197,7 @@ class ItemCard extends React.Component {
             />
           ) : (
             <Button
-              style={addToCart}
+              style={addToCartButton}
               snacksStyle="secondary"
               size="small"
               onClick={() => {
@@ -251,25 +255,31 @@ class ItemCard extends React.Component {
 
   // Remove the item from the cart
   handleRemove = () => {
-    var quantityInCart = this.state.quantityInCart;
-    if (localStorage.getItem("cart") != null) {
-      var cartString = localStorage.getItem("cart");
-      var cart = JSON.parse(cartString);
-      if (cart.hasOwnProperty(this.props.itemid)) {
-        quantityInCart = 0;
-        // cart[this.props.itemid] = quantity
-        delete cart[this.props.itemid];
-        localStorage.setItem("cart", JSON.stringify(cart));
-        console.log(
-          "Quantity of item with itemid " +
-            this.props.itemid +
-            " is " +
-            quantityInCart
-        );
-        this.setState({ quantityInCart: quantityInCart });
-        console.log("State " + this.state.quantityInCart);
-      }
+    let item = {
+      itemid: this.props.itemid
     }
+
+    this.props.removeFromCart(item)
+
+    // var quantityInCart = this.state.quantityInCart;
+    // if (localStorage.getItem("cart") != null) {
+    //   var cartString = localStorage.getItem("cart");
+    //   var cart = JSON.parse(cartString);
+    //   if (cart.hasOwnProperty(this.props.itemid)) {
+    //     quantityInCart = 0;
+    //     // cart[this.props.itemid] = quantity
+    //     delete cart[this.props.itemid];
+    //     localStorage.setItem("cart", JSON.stringify(cart));
+    //     console.log(
+    //       "Quantity of item with itemid " +
+    //         this.props.itemid +
+    //         " is " +
+    //         quantityInCart
+    //     );
+    //     this.setState({ quantityInCart: quantityInCart });
+    //     console.log("State " + this.state.quantityInCart);
+    //   }
+    // }
   };
 
   // Redirect to the item's product page.
@@ -281,32 +291,34 @@ class ItemCard extends React.Component {
   };
 
   handleAddToCart = () => {
-    var quantityInCart = this.state.quantityInCart;
-    var item = {
+    let item = {
       itemid: this.props.itemid,
       image: this.props.image,
       name: this.props.name,
       price: this.props.price,
       sale: this.props.sale,
-      weight: this.props.weight
+      weight: this.props.weight,
+      quantityInCart: 1
     };
-    console.log("Prop quantity is " + this.props.quantity);
-    if (localStorage.getItem("cart") != null) {
-      var cartString = localStorage.getItem("cart");
-      console.log(cartString);
-      var cart = JSON.parse(cartString);
-      quantityInCart += 1;
-      item.quantityInCart = quantityInCart;
-      cart[this.props.itemid] = item;
-      localStorage.setItem("cart", JSON.stringify(cart));
-      this.setState({ quantityInCart: quantityInCart });
-    } else {
-      var cart = {};
-      item.quantityInCart = ++quantityInCart;
-      cart[this.props.itemid] = item;
-      localStorage.setItem("cart", JSON.stringify(cart));
-      this.setState({ quantityInCart: quantityInCart });
-    }
+
+    this.props.addToCart(item);
+    // console.log("Prop quantity is " + this.props.quantity);
+    // if (localStorage.getItem("cart") != null) {
+    //   var cartString = localStorage.getItem("cart");
+    //   console.log(cartString);
+    //   var cart = JSON.parse(cartString);
+    //   quantityInCart += 1;
+    //   item.quantityInCart = quantityInCart;
+    //   cart[this.props.itemid] = item;
+    //   localStorage.setItem("cart", JSON.stringify(cart));
+    //   this.setState({ quantityInCart: quantityInCart });
+    // } else {
+    //   var cart = {};
+    //   item.quantityInCart = ++quantityInCart;
+    //   cart[this.props.itemid] = item;
+    //   localStorage.setItem("cart", JSON.stringify(cart));
+    //   this.setState({ quantityInCart: quantityInCart });
+    // }
   };
 
   render() {
@@ -405,7 +417,10 @@ class ItemCard extends React.Component {
     }
   }
 }
-export default withRouter(ItemCard);
+export default connect(
+  null,
+  { addToCart, removeFromCart }
+)(withRouter(ItemCard));
 
 ItemCard.propTypes = {
   itemid: PropTypes.string.isRequired,
