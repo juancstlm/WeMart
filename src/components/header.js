@@ -5,7 +5,7 @@ import ReactCSSTransitionGroup from "react-addons-css-transition-group"; // ES6
 import "./header.css";
 import Cart from "./Cart";
 import { Icon } from "ic-snacks";
-import {poolData} from "../services/api";
+import { poolData } from "../services/api";
 
 //Styles
 const astext = {
@@ -78,9 +78,7 @@ var AmazonCognitoIdentity = require("amazon-cognito-identity-js");
 
 var zip;
 var cognitoUser;
-var query;
-
-var query;
+let query = "";
 
 class Header extends Component {
   constructor(props) {
@@ -285,7 +283,7 @@ class Header extends Component {
             aria-expanded="true"
             style={{ backgroundColor: "#D30707" }}
           >
-            <i class="fas fa-user" />
+            <i className="fas fa-user" />
             <span className="caret" />
           </button>
           <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
@@ -481,6 +479,7 @@ class Header extends Component {
               >
                 <a className="navbar-brand" style={center} href="/home">
                   <img
+                    alt={"logo"}
                     src={logo}
                     style={{ height: "35px", backgroundColor: "clear" }}
                   />

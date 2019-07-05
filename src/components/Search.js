@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { Button, DropdownMenu, MenuItem } from "ic-snacks";
 import {
+  dynamoDB as dynamodb,
   getDepartmentItems,
   getSavingsItems,
   searchItems
@@ -13,15 +14,15 @@ import {
 const Search = ({ history, location }) => {
   const [items, setItems] = useState([]);
   const [finishedLoading, setFinishedLoading] = useState(false);
-  const [query, setQuery] = useState("");
 
   useEffect(() => {
     getQuery();
   }, []);
 
   const getQuery = () => {
+    let query = ''
     const queryParams = new URLSearchParams(location.search);
-    setQuery(queryParams.get("query"));
+    query = queryParams.get("query")
     let special = queryParams.get("special");
 
     if (special === "true") {
@@ -124,7 +125,7 @@ const Search = ({ history, location }) => {
           aria-expanded="true"
         >
           Sorting by
-          <span className="cart"></span>
+          <span className="caret"></span>
         </button>
         <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
           <li>

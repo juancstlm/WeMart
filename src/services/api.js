@@ -8,23 +8,11 @@ import { Marshaller } from "@aws/dynamodb-auto-marshaller";
 
 const marshaller = new Marshaller({ unwrapNumbers: true });
 
-const params = {
-  TableName: "department"
-};
-
-const savingItemsParams = {
-  ExpressionAttributeValues: {
-    ":s": {
-      N: "0"
-    }
-  },
-  FilterExpression: "sale <> :s",
-  TableName: "item"
-};
-
 const ITEM_SEARCH_PARAMS = {
   TableName: "item"
 };
+
+/// AWS Services
 
 export const poolData = {
   UserPoolId: process.env.REACT_APP_COGNITO_USER_POOL_ID,
@@ -39,6 +27,39 @@ export const dynamoDB = new DynamoDB({
   }
 });
 
+export const lambda = new AWS.Lambda({
+  region: process.env.REACT_APP_AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY
+  }
+});
+
+export const userPool = new CognitoUserPool(poolData);
+
+// Attempts to get the current logged in cognito user's email
+export const getCogtnioUser = () => {
+  return new Promise((resolve, reject) => {
+    let cognitoUser = userPool.getCurrentUser();
+    if (cognitoUser !== null) {
+      cognitoUser.getSession(function(err, session) {
+        if (err) {
+          console.log(err);
+          reject(null);
+        }
+      });
+      // Necessary because the closure has no access to this.state
+      cognitoUser.getUserAttributes(function(err, result) {
+        if (err) {
+          console.log(err);
+          reject(null);
+        }
+        resolve(result[2].Value);
+      });
+    }
+  });
+};
+
 // Unmarshalls an object from a DynamoDB instance
 const unmarshallObject = object => {
   let unmarshalledObject = {};
@@ -51,7 +72,11 @@ const unmarshallObject = object => {
 };
 
 // Gets the data list of current departments
-export const getDepartments = (onSuccess, onFail) => {
+export const getDepartments = limit => {
+  const params = {
+    TableName: "department",
+    Limit: limit
+  };
   return new Promise((resolve, reject) => {
     dynamoDB.scan(params, (err, data) => {
       if (err) {
@@ -60,7 +85,6 @@ export const getDepartments = (onSuccess, onFail) => {
         let unmarshalledData = data.Items.map(item => {
           return unmarshallObject(item);
         });
-        console.log("unmarshalledData: ", unmarshalledData);
         resolve(unmarshalledData);
       }
     });
@@ -87,7 +111,6 @@ export const getDepartmentItems = department => {
         let items = data.Items.map(element => {
           return unmarshallObject(element);
         });
-        console.log(items);
         resolve(items);
       }
     });
@@ -95,7 +118,17 @@ export const getDepartmentItems = department => {
 };
 
 // Queries the DynamoDB for all the items that are on sale
-export const getSavingsItems = () => {
+export const getSavingsItems = limit => {
+  const savingItemsParams = {
+    ExpressionAttributeValues: {
+      ":s": {
+        N: "0"
+      }
+    },
+    FilterExpression: "sale <> :s",
+    TableName: "item",
+    Limit: limit
+  };
   return new Promise((resolve, reject) => {
     dynamoDB.scan(savingItemsParams, function(err, data) {
       if (err) {
@@ -150,20 +183,59 @@ export const searchItems = query => {
     });
   });
 };
-// export const getDepartments = () => {
-//   return async data => {
-//     dynamoDB.scan(
-//       {
-//         TableName: "department"
-//       },
-//       (err, data) => {
-//         if (err) {
-//           alert(JSON.stringify(err));
-//           return null;
-//         } else {
-//           return data.Items;
-//         }
-//       }
-//     );
-//   };
-// };
+
+// BACK END API IS BROKEN ATM
+export const getOrderHistory = (userID, limit) => {
+  let orderParams = {
+    ExpressionAttributeValues: {
+      ":u": {
+        S: userID
+      }
+    },
+    ExpressionAttributeNames: {
+      "#S": "items"
+    },
+    FilterExpression: "userid = :u",
+    ProjectionExpression: "#S",
+    Limit: limit,
+    TableName: "orders"
+  };
+  return new Promise((resolve, reject) => {
+    dynamoDB.scan(orderParams, (err, data) => {
+      if (err) {
+        console.log(err, err.stack);
+        reject(null);
+      } else {
+        console.log("order history", data);
+        // data.Items.forEach(order => {
+        //   console.log("ORDER", order);
+        //   order.items.L.forEach(i => {
+        //     let itemId = i.M.itemid.S;
+        //     console.log("[itemids]", itemId);
+        //     var set = this.state.orderHistory;
+        //     set.add(itemId);
+        //     this.setState({ orderHistory: set });
+        //   });
+        // });
+      }
+    });
+  });
+};
+
+// Get item from db
+export const getItemFromDB = itemID => {
+  let itemParams = {
+    Key: { itemid: { S: itemid } },
+    TableName: "item"
+  };
+  return new Promise((resolve, reject) => {
+    dynamoDB.getItem(itemParams, (err, data) => {
+      if (err) {
+        reject(null);
+      } else if (data.Item) {
+        let item = unmarshallObject(data.Item);
+        resolve({...item, inCart: 0})
+      }
+    });
+  });
+};

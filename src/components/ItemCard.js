@@ -75,8 +75,9 @@ const itemCard_buttonBar = { margin: "4% 5% 0% 5%" };
 
 const ItemCard = ({ item, inCart }) => {
 
+  // console.log('item', item)
+
   const {
-    departmentid,
     image,
     itemid,
     name,
@@ -113,7 +114,7 @@ const ItemCard = ({ item, inCart }) => {
   // If sale price is zero then it renders normally, otherwise
   // it renders the sale price in red and the original MSRP with a strike-through.
   const renderPrice = () => {
-    if (sale !== "0") {
+    if (sale !== 0) {
       return (
         <div style={itemCard_price}>
           <span style={itemCard_price_sale}>${Number(sale).toFixed(2)}</span>
@@ -130,7 +131,7 @@ const ItemCard = ({ item, inCart }) => {
   // Places a badge to the top right of the item to indicate any special properties of the item.
   // Currently "On Sale" is the only badge.
   const renderBadge = () => {
-    if (sale !== "0") {
+    if (sale !== 0) {
       return <div style={itemCard_badge_onSale}></div>;
     }
   };
@@ -139,7 +140,7 @@ const ItemCard = ({ item, inCart }) => {
   const renderButtonBar = () => {
     // Mobile has traditional state
     if (window.innerWidth < 550) {
-      if (this.state.quantityInCart === 0) {
+      if (quantityInCart === 0) {
         return (
           <div style={itemCard_buttonBar}>
             <Button
@@ -171,7 +172,7 @@ const ItemCard = ({ item, inCart }) => {
     } else {
       return (
         <div style={itemCard_buttonBar}>
-          {inCart && this.state.quantityInCart !== 0 ? (
+          {inCart && quantityInCart !== 0 ? (
             <Counter
               quantity={quantityInCart}
               onIncrease={handleIncrease}

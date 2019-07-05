@@ -25,10 +25,9 @@ import {
   CognitoUserAttribute,
   CognitoUserPool
 } from "amazon-cognito-identity-js";
-import { DynamoDB } from "aws-sdk/index";
 import NewCardForm from "./NewCardForm";
 import AWS from "aws-sdk";
-import {poolData, dynamoDB as dynamodb} from "../services/api";
+import {poolData, dynamoDB as dynamodb, lambda} from "../services/api";
 
 let newAddressStyle = {
   textAlign: "center",
@@ -237,18 +236,6 @@ class AccountSettings extends React.Component {
 
   // Gets the payment sources of a user
   getPaymentSources(email) {
-    var lambda;
-    if (process.env.NODE_ENV === "development") {
-      lambda = new AWS.Lambda(require("../db").lambda);
-    } else {
-      lambda = new AWS.Lambda({
-        region: "us-west-1",
-        credentials: {
-          accessKeyId: process.env.REACT_APP_DB_accessKeyId,
-          secretAccessKey: process.env.REACT_APP_DB_secretAccessKey
-        }
-      });
-    }
     var payLoad = {
       stripeEmail: email
     };
@@ -334,19 +321,6 @@ class AccountSettings extends React.Component {
   }
 
   handleNewCard(token) {
-    var lambda;
-    if (process.env.NODE_ENV === "development") {
-      lambda = new AWS.Lambda(require("../db").lambda);
-    } else {
-      lambda = new AWS.Lambda({
-        region: "us-west-1",
-        credentials: {
-          accessKeyId: process.env.REACT_APP_DB_accessKeyId,
-          secretAccessKey: process.env.REACT_APP_DB_secretAccessKey
-        }
-      });
-    }
-
     var payLoad = {
       email: this.state.user.email,
       stripeSource: token.source.id
