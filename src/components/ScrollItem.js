@@ -28,7 +28,7 @@ const ScrollItem = ({ item }) => {
   }
 
   function Items() {
-    return <ItemCard key={item} item={item} inCart={0} />;
+    return <ItemCard key={item} item={item} />;
   }
 
   function Departments(props) {

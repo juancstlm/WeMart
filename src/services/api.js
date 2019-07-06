@@ -65,7 +65,11 @@ const unmarshallObject = object => {
   let unmarshalledObject = {};
   for (let key in object) {
     if (object.hasOwnProperty(key)) {
-      unmarshalledObject[key] = marshaller.unmarshallValue(object[key]);
+      if (key === "itemid") {
+        unmarshalledObject[key] = Number(marshaller.unmarshallValue(object[key]))
+      } else {
+        unmarshalledObject[key] = marshaller.unmarshallValue(object[key]);
+      }
     }
   }
   return unmarshalledObject;
@@ -135,6 +139,7 @@ export const getSavingsItems = limit => {
         console.log(JSON.stringify(err));
         reject(null);
       } else {
+        console.log(data.Items)
         let items = data.Items.map(element => {
           return unmarshallObject(element);
         });
@@ -225,7 +230,7 @@ export const getOrderHistory = (userID, limit) => {
 // Get item from db
 export const getItemFromDB = itemID => {
   let itemParams = {
-    Key: { itemid: { S: itemid } },
+    Key: { itemid: { S: itemID } },
     TableName: "item"
   };
   return new Promise((resolve, reject) => {
@@ -234,7 +239,7 @@ export const getItemFromDB = itemID => {
         reject(null);
       } else if (data.Item) {
         let item = unmarshallObject(data.Item);
-        resolve({...item, inCart: 0})
+        resolve(item);
       }
     });
   });

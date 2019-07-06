@@ -5,8 +5,9 @@ import { StyleRoot } from "radium";
 import Counter from "./Counter";
 import onSaleBadge from "../images/onSaleBadge.png";
 import { withRouter } from "react-router-dom";
-import { addToCart, removeFromCart } from "../redux/actions";
+import { addToCart, removeFromCart, updateQuantity } from "../redux/actions";
 import { connect } from "react-redux";
+import {getItemInCartById, getQuantityInCartById} from "../redux/selectors";
 
 //STYLES
 //Add To cart button Style
@@ -73,9 +74,7 @@ const itemCard_price_crossedOut = {
 };
 const itemCard_buttonBar = { margin: "4% 5% 0% 5%" };
 
-const ItemCard = ({ item, inCart }) => {
-
-  // console.log('item', item)
+const ItemCard = ({ item, inCart, addToCart, removeFromCart, updateQuantity }) => {
 
   const {
     image,
@@ -84,7 +83,6 @@ const ItemCard = ({ item, inCart }) => {
     price,
     quantity,
     sale,
-    quantityInCart
   } = item;
 
   const updateQuantityFromCart = () => {
@@ -94,18 +92,18 @@ const ItemCard = ({ item, inCart }) => {
       if (cart.hasOwnProperty(itemid)) {
         console.log("Local storage cart", cart);
         addToCart(cart[itemid]);
-        var quantityInCart = cart[itemid].quantityInCart;
+        var inCart = cart[itemid].inCart;
         this.setState({
-          quantityInCart: quantityInCart
+          inCart: inCart
         });
       } else {
         this.setState({
-          quantityInCart: 0
+          inCart: 0
         });
       }
     } else {
       this.setState({
-        quantityInCart: 0
+        inCart: 0
       });
     }
   };
@@ -140,7 +138,7 @@ const ItemCard = ({ item, inCart }) => {
   const renderButtonBar = () => {
     // Mobile has traditional state
     if (window.innerWidth < 550) {
-      if (quantityInCart === 0) {
+      if (inCart === 0) {
         return (
           <div style={itemCard_buttonBar}>
             <Button
@@ -159,7 +157,7 @@ const ItemCard = ({ item, inCart }) => {
         return (
           <div style={itemCard_buttonBar}>
             <Counter
-              quantity={quantityInCart}
+              quantity={inCart}
               onIncrease={handleIncrease}
               onDecrease={handleDecrease}
               onRemove={handleRemove}
@@ -172,9 +170,9 @@ const ItemCard = ({ item, inCart }) => {
     } else {
       return (
         <div style={itemCard_buttonBar}>
-          {inCart && quantityInCart !== 0 ? (
+          {inCart && inCart !== 0 ? (
             <Counter
-              quantity={quantityInCart}
+              quantity={inCart}
               onIncrease={handleIncrease}
               onDecrease={handleDecrease}
               onRemove={handleRemove}
@@ -198,38 +196,40 @@ const ItemCard = ({ item, inCart }) => {
 
   // Increases the quantity of this item in the cart
   const handleIncrease = () => {
-    // var quantityInCart = this.state.quantityInCart;
+    updateQuantity(item, 1)
+    // var inCart = this.state.inCart;
     // if (localStorage.getItem("cart") != null) {
     //   var cartString = localStorage.getItem("cart");
     //   var cart = JSON.parse(cartString);
     //   if (cart.hasOwnProperty(itemid)) {
     //     var item = cart[itemid];
-    //     quantityInCart++;
-    //     item.quantityInCart = quantityInCart;
+    //     inCart++;
+    //     item.inCart = inCart;
     //     cart[itemid] = item;
     //     localStorage.setItem("cart", JSON.stringify(cart));
-    //     this.setState({ quantityInCart: quantityInCart });
+    //     this.setState({ inCart: inCart });
     //   }
     // }
   };
 
   // Decreases teh quantity of this item by 1 in the cart.
   const handleDecrease = () => {
-    // var quantityInCart = this.state.quantityInCart;
+    updateQuantity(item, -1)
+    // var inCart = this.state.inCart;
     // if (localStorage.getItem("cart") != null) {
     //   var cartString = localStorage.getItem("cart");
     //   var cart = JSON.parse(cartString);
     //   if (cart.hasOwnProperty(itemid)) {
     //     var item = cart[itemid];
-    //     quantityInCart--;
-    //     item.quantityInCart = quantityInCart;
+    //     inCart--;
+    //     item.inCart = inCart;
     //     cart[itemid] = item;
     //     localStorage.setItem("cart", JSON.stringify(cart));
     //     console.log(
-    //       "Quantity of item with itemid " + itemid + " is " + quantityInCart
+    //       "Quantity of item with itemid " + itemid + " is " + inCart
     //     );
-    //     this.setState({ quantityInCart: quantityInCart });
-    //     console.log("State " + this.state.quantityInCart);
+    //     this.setState({ inCart: inCart });
+    //     console.log("State " + this.state.inCart);
     //   }
     // }
   };
@@ -238,12 +238,12 @@ const ItemCard = ({ item, inCart }) => {
   const handleRemove = () => {
     removeFromCart(item);
 
-    // var quantityInCart = this.state.quantityInCart;
+    // var inCart = this.state.inCart;
     // if (localStorage.getItem("cart") != null) {
     //   var cartString = localStorage.getItem("cart");
     //   var cart = JSON.parse(cartString);
     //   if (cart.hasOwnProperty(itemid)) {
-    //     quantityInCart = 0;
+    //     inCart = 0;
     //     // cart[itemid] = quantity
     //     delete cart[itemid];
     //     localStorage.setItem("cart", JSON.stringify(cart));
@@ -251,10 +251,10 @@ const ItemCard = ({ item, inCart }) => {
     //       "Quantity of item with itemid " +
     //         itemid +
     //         " is " +
-    //         quantityInCart
+    //         inCart
     //     );
-    //     this.setState({ quantityInCart: quantityInCart });
-    //     console.log("State " + this.state.quantityInCart);
+    //     this.setState({ inCart: inCart });
+    //     console.log("State " + this.state.inCart);
     //   }
     // }
   };
@@ -268,23 +268,24 @@ const ItemCard = ({ item, inCart }) => {
   };
 
   const handleAddToCart = () => {
-    addToCart(item);
+    console.log('item added to cart :',item);
+    addToCart(item, 1);
     // console.log("Prop quantity is " + quantity);
     // if (localStorage.getItem("cart") != null) {
     //   var cartString = localStorage.getItem("cart");
     //   console.log(cartString);
     //   var cart = JSON.parse(cartString);
-    //   quantityInCart += 1;
-    //   item.quantityInCart = quantityInCart;
+    //   inCart += 1;
+    //   item.inCart = inCart;
     //   cart[itemid] = item;
     //   localStorage.setItem("cart", JSON.stringify(cart));
-    //   this.setState({ quantityInCart: quantityInCart });
+    //   this.setState({ inCart: inCart });
     // } else {
     //   var cart = {};
-    //   item.quantityInCart = ++quantityInCart;
+    //   item.inCart = ++inCart;
     //   cart[itemid] = item;
     //   localStorage.setItem("cart", JSON.stringify(cart));
-    //   this.setState({ quantityInCart: quantityInCart });
+    //   this.setState({ inCart: inCart });
     // }
   };
 
@@ -378,9 +379,8 @@ const ItemCard = ({ item, inCart }) => {
     );
   }
 };
-export default connect(
-  null,
-  { addToCart, removeFromCart }
+export default connect( (state, ownProps)=> ({inCart: getQuantityInCartById(state,ownProps.item.itemid)}),
+  { addToCart, removeFromCart, updateQuantity }
 )(withRouter(ItemCard));
 
 ItemCard.propTypes = {

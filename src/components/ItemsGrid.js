@@ -30,6 +30,7 @@ export default class ItemsGrid extends React.Component {
       <li style={itemGrid_itemCard} key={item.itemid}>
         <ItemCard
           item={item}
+          inCart={0}
           key={item.itemid}
         />
       </li>

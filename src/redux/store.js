@@ -8,6 +8,6 @@ import _ from "lodash";
 const logger = createLogger();
 const middleWares = _.compact([thunk, freeze, logger]);
 const createStoreWithMiddleWare = applyMiddleware(...middleWares)(createStore);
-const store = createStoreWithMiddleWare(rootReducer);
+const store = createStoreWithMiddleWare(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 export default store;
