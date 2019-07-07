@@ -55,13 +55,13 @@ class CartItem extends Component {
                 <span style={{color: 'gray'}}>{this.props.item.quantity}</span>
               </div>
               <div className="col-xs-2" style={{textAlign: 'right'}}>
-                <Price isOnSale={this.props.item.sale != '0'} salePrice={this.props.item.sale} regularPrice={this.props.item.price} quantity={this.props.item.quantityInCart}/>
+                <Price isOnSale={this.props.item.sale !== '0'} salePrice={this.props.item.sale} regularPrice={this.props.item.price} quantity={this.props.item.quantityInCart}/>
               </div>
               <div style={{marginRight: '15px', width: '40%', height: '30px', float: 'right', marginBottom: '2%'}}>
                 <Counter quantity={this.props.item.quantityInCart}
-                  onIncrease={() => this.props.handleIncrease(this.props.item.itemid)}
-                  onDecrease={()=> this.props.handleDecrease(this.props.item.itemid)}
-                  onRemove={() => this.props.handleRemove(this.props.item.itemid)} />
+                  onIncrease={() => this.props.handleIncrease(this.props.item)}
+                  onDecrease={()=> this.props.handleDecrease(this.props.item)}
+                  onRemove={() => this.props.handleRemove(this.props.item)} />
               </div>
             </div>
           </div>

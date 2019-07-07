@@ -2,6 +2,7 @@ import { ADD_TO_CART, REMOVE_FROM_CART, UPDATE_QUANTITY } from "./actionTypes";
 
 export const addToCart = (item, quantity) => ({
   type: ADD_TO_CART,
+  item: item,
   itemid: item.itemid
 });
 

@@ -6,16 +6,16 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
-  let { itemid } = action;
+  let { itemid, item } = action;
   switch (action.type) {
     case ADD_TO_CART:
       return {
-        items: [itemid, ...state.items],
+        items: [...state.items, item],
         quantityById: { ...state.quantityById, [itemid]: 1 }
       };
     case REMOVE_FROM_CART:
       return {
-        items: state.items.filter(item => item !== itemid),
+        items: state.items.filter(item => item.itemid !== itemid),
         quantityById: { ...state.quantityById, [itemid]: undefined }
       };
     case UPDATE_QUANTITY:

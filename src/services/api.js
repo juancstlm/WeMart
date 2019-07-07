@@ -230,14 +230,16 @@ export const getOrderHistory = (userID, limit) => {
 // Get item from db
 export const getItemFromDB = itemID => {
   let itemParams = {
-    Key: { itemid: { S: itemID } },
+    Key: { itemid: { S: String(itemID) } },
     TableName: "item"
   };
   return new Promise((resolve, reject) => {
     dynamoDB.getItem(itemParams, (err, data) => {
       if (err) {
+        console.log("error fetching item", err)
         reject(null);
       } else if (data.Item) {
+        console.log('getItemFromDB: ', data)
         let item = unmarshallObject(data.Item);
         resolve(item);
       }

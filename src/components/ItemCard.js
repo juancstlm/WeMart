@@ -197,41 +197,11 @@ const ItemCard = ({ item, inCart, addToCart, removeFromCart, updateQuantity }) =
   // Increases the quantity of this item in the cart
   const handleIncrease = () => {
     updateQuantity(item, 1)
-    // var inCart = this.state.inCart;
-    // if (localStorage.getItem("cart") != null) {
-    //   var cartString = localStorage.getItem("cart");
-    //   var cart = JSON.parse(cartString);
-    //   if (cart.hasOwnProperty(itemid)) {
-    //     var item = cart[itemid];
-    //     inCart++;
-    //     item.inCart = inCart;
-    //     cart[itemid] = item;
-    //     localStorage.setItem("cart", JSON.stringify(cart));
-    //     this.setState({ inCart: inCart });
-    //   }
-    // }
   };
 
   // Decreases teh quantity of this item by 1 in the cart.
   const handleDecrease = () => {
     updateQuantity(item, -1)
-    // var inCart = this.state.inCart;
-    // if (localStorage.getItem("cart") != null) {
-    //   var cartString = localStorage.getItem("cart");
-    //   var cart = JSON.parse(cartString);
-    //   if (cart.hasOwnProperty(itemid)) {
-    //     var item = cart[itemid];
-    //     inCart--;
-    //     item.inCart = inCart;
-    //     cart[itemid] = item;
-    //     localStorage.setItem("cart", JSON.stringify(cart));
-    //     console.log(
-    //       "Quantity of item with itemid " + itemid + " is " + inCart
-    //     );
-    //     this.setState({ inCart: inCart });
-    //     console.log("State " + this.state.inCart);
-    //   }
-    // }
   };
 
   // Remove the item from the cart
