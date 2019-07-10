@@ -134,7 +134,7 @@ class Header extends Component {
     if (this.props.location !== undefined) {
       const queryParams = new URLSearchParams(this.props.location.search);
       let special = queryParams.get("special");
-      if (special != "true") {
+      if (special !== "true") {
         query = queryParams.get("query");
       }
     }

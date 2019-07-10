@@ -21,8 +21,8 @@ export const getCartTotal = store =>
     ? getItemsInCart(store).reduce(
         (total, item) =>
           item.sale !== 0
-            ? total + (item.sale * getQuantityInCartById(store, item.itemid))
-            : total + (item.price * getQuantityInCartById(store, item.itemid)),
+            ? total + item.sale * getQuantityInCartById(store, item.itemid)
+            : total + item.price * getQuantityInCartById(store, item.itemid),
         0
       )
     : 0;

@@ -13,7 +13,6 @@ const ITEM_SEARCH_PARAMS = {
 };
 
 /// AWS Services
-
 export const poolData = {
   UserPoolId: process.env.REACT_APP_COGNITO_USER_POOL_ID,
   ClientId: process.env.REACT_APP_COGNITO_CLIENT_ID
@@ -47,14 +46,14 @@ export const getCogtnioUser = () => {
           console.log(err);
           reject(null);
         }
-      });
-      // Necessary because the closure has no access to this.state
-      cognitoUser.getUserAttributes(function(err, result) {
-        if (err) {
-          console.log(err);
-          reject(null);
-        }
-        resolve(result[2].Value);
+        // Necessary because the closure has no access to this.state
+        cognitoUser.getUserAttributes(function(err, result) {
+          if (err) {
+            console.log(err);
+            reject(null);
+          }
+          resolve(result[2].Value);
+        });
       });
     }
   });
@@ -66,7 +65,9 @@ const unmarshallObject = object => {
   for (let key in object) {
     if (object.hasOwnProperty(key)) {
       if (key === "itemid") {
-        unmarshalledObject[key] = Number(marshaller.unmarshallValue(object[key]))
+        unmarshalledObject[key] = Number(
+          marshaller.unmarshallValue(object[key])
+        );
       } else {
         unmarshalledObject[key] = marshaller.unmarshallValue(object[key]);
       }
@@ -139,7 +140,7 @@ export const getSavingsItems = limit => {
         console.log(JSON.stringify(err));
         reject(null);
       } else {
-        console.log(data.Items)
+        console.log(data.Items);
         let items = data.Items.map(element => {
           return unmarshallObject(element);
         });
@@ -189,6 +190,7 @@ export const searchItems = query => {
   });
 };
 
+// Returns a given user's item order  history
 // BACK END API IS BROKEN ATM
 export const getOrderHistory = (userID, limit) => {
   let orderParams = {
@@ -227,7 +229,7 @@ export const getOrderHistory = (userID, limit) => {
   });
 };
 
-// Get item from db
+//Get teh details of an item given its id
 export const getItemFromDB = itemID => {
   let itemParams = {
     Key: { itemid: { S: String(itemID) } },
@@ -236,13 +238,127 @@ export const getItemFromDB = itemID => {
   return new Promise((resolve, reject) => {
     dynamoDB.getItem(itemParams, (err, data) => {
       if (err) {
-        console.log("error fetching item", err)
+        console.log("error fetching item", err);
         reject(null);
       } else if (data.Item) {
-        console.log('getItemFromDB: ', data)
+        console.log("getItemFromDB: ", data);
         let item = unmarshallObject(data.Item);
         resolve(item);
       }
     });
   });
 };
+
+
+// given an array of item ids it returns an array of item objects
+export const getItems = items => {
+  let keys = [];
+  items.map(itemId => {
+    keys.push({ itemid: { S: itemId } });
+  });
+  let params = {
+    RequestItems: {
+      item: {
+        Keys: keys
+      }
+    }
+  };
+
+  return new Promise((resolve, reject) => {
+    dynamoDB.batchGetItem(params, (err, data) => {
+      if (err) {
+        alert(err.message);
+        console.log(err.message);
+        reject(null)
+      } else {
+        let items = data.Responses.item.map(item => unmarshallObject(item));
+        resolve(items);
+      }
+    });
+  });
+};
+
+
+export const removeItemFromSavedLists = (itemId, userId) => {
+  let params = "";
+  dynamoDB.updateItem(params, function(err, data) {
+    if (err) {
+      alert(JSON.stringify(err));
+    } else {
+      console.log("Removed from Shopping List: " + data);
+    }
+  });
+};
+
+// Returns the items in the given user's lists
+// Currently default to shopping list
+export const getShoppingListItemsIds = userid => {
+  let params = {
+    Key: {
+      userid: {
+        S: userid
+      }
+    },
+    TableName: "user"
+  };
+
+  return new Promise((resolve, reject) => {
+    dynamoDB.getItem(params, (err, data) => {
+      if (err) {
+        console.log(err, err.stack);
+        reject(null);
+      } else {
+        let items = unmarshallObject(data.Item);
+        resolve(items.lists.shoppingList);
+      }
+    });
+  });
+};
+
+
+export const updateShoppingList = (items, userid) => {
+  let params = {};
+  if (items.length === 0) {
+    params = {
+      TableName: "user",
+      Key: {
+        userid: {
+          S: userid
+        }
+      },
+      UpdateExpression: "REMOVE lists.shoppingList",
+      ReturnValues: "UPDATED_NEW"
+    };
+  } else {
+    params = {
+      TableName: "user",
+      Key: {
+        userid: {
+          S: userid
+        }
+      },
+      UpdateExpression: "SET lists = :lists",
+      ExpressionAttributeValues: {
+        ":lists": {
+          M: {
+            shoppingList: {
+              SS: items
+            }
+          }
+        }
+      },
+      ReturnValues: "UPDATED_NEW"
+    };
+  }
+
+  return new Promise((resolve, reject) => {
+    dynamoDB.updateItem(params, function(err, data) {
+      if (err) {
+        alert(JSON.stringify(err));
+        reject(null)
+      } else {
+        console.log("Removed from Shopping List: " + data);
+      }
+    });
+  })
+}

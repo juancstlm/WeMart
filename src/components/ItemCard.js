@@ -74,16 +74,14 @@ const itemCard_price_crossedOut = {
 };
 const itemCard_buttonBar = { margin: "4% 5% 0% 5%" };
 
-const ItemCard = ({ item, inCart, addToCart, removeFromCart, updateQuantity }) => {
-
-  const {
-    image,
-    itemid,
-    name,
-    price,
-    quantity,
-    sale,
-  } = item;
+const ItemCard = ({
+  item,
+  inCart,
+  addToCart,
+  removeFromCart,
+  updateQuantity
+}) => {
+  const { image, itemid, name, price, quantity, sale } = item;
 
   const updateQuantityFromCart = () => {
     if (localStorage.getItem("cart") !== null) {
@@ -196,12 +194,12 @@ const ItemCard = ({ item, inCart, addToCart, removeFromCart, updateQuantity }) =
 
   // Increases the quantity of this item in the cart
   const handleIncrease = () => {
-    updateQuantity(item, 1)
+    updateQuantity(item, 1);
   };
 
   // Decreases teh quantity of this item by 1 in the cart.
   const handleDecrease = () => {
-    updateQuantity(item, -1)
+    updateQuantity(item, -1);
   };
 
   // Remove the item from the cart
@@ -238,7 +236,7 @@ const ItemCard = ({ item, inCart, addToCart, removeFromCart, updateQuantity }) =
   };
 
   const handleAddToCart = () => {
-    console.log('item added to cart :',item);
+    console.log("item added to cart :", item);
     addToCart(item, 1);
     // console.log("Prop quantity is " + quantity);
     // if (localStorage.getItem("cart") != null) {

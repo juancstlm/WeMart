@@ -1,225 +1,61 @@
 import Header from "./header";
 import Footer from "./Footer";
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { withRouter, Link } from "react-router-dom";
-import { DynamoDB } from "aws-sdk/index";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { poolData, dynamoDB as dynamodb } from "../services/api";
+import {
+  getCogtnioUser,
+  getShoppingListItemsIds,
+  getItems, updateShoppingList
+} from "../services/api";
+import { addToCart } from "../redux/actions";
+import { connect } from "react-redux";
 
-var AmazonCognitoIdentity = require("amazon-cognito-identity-js");
+const ShoppingList = ({ addToCart, history }) => {
+  const [finishedLoading, setFinishedLoading] = useState(false);
+  const [items, setItems] = useState([]);
+  const [userid, setUserid] = useState("");
 
-var itemIds = [];
-var cognitoUser;
-var email;
-
-class ShoppingList extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      finishedLoading: false,
-      items: []
-    };
-
-    this.getCurrentUser();
-  }
-
-  getCurrentUser() {
-    var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
-
-    cognitoUser = userPool.getCurrentUser();
-
-    let nested = this;
-
-    if (cognitoUser != null) {
-      cognitoUser.getSession(function(err, session) {
-        if (err) {
-          alert(err.message || JSON.stringify(err));
-          return;
-        }
-        console.log("session validity: " + session.isValid());
-
-        // NOTE: getSession must be called to authenticate user before calling getUserAttributes
-        cognitoUser.getUserAttributes(function(err, attributes) {
-          if (err) {
-            console.log(err);
-          } else {
-            attributes.forEach(function(att) {
-              if (att.Name == "email") {
-                email = att.Value;
-                nested.getItemIds();
-              }
-            });
-          }
+  useEffect(() => {
+    getCogtnioUser().then(userid => {
+      setUserid(userid);
+      getShoppingListItemsIds(userid).then(result => {
+        let itemids = Array.from(result);
+        getItems(itemids).then(result => {
+          setItems(result);
         });
       });
-    }
-  }
-
-  getItemIds() {
-    var params = {
-      Key: {
-        userid: {
-          S: email
-        }
-      },
-      TableName: "user"
-    };
-
-    dynamodb.getItem(
-      params,
-      function(err, data) {
-        if (err) {
-          console.log(err, err.stack);
-        } else {
-          try {
-            itemIds = data.Item.lists.M.shoppingList.SS;
-          } catch (error) {
-            console.log("shoppingList not yet created  " + error.message);
-          } finally {
-            this.getItems();
-          }
-        }
-      }.bind(this)
-    );
-  }
-
-  getItems() {
-    var keys = [];
-    itemIds.map(itemId => {
-      keys.push({ itemid: { S: itemId } });
     });
+  }, []);
 
-    if (keys.length !== 0) {
-      var params = {
-        RequestItems: {
-          item: {
-            Keys: keys
-          }
-        }
-      };
+  const deleteItem = item => {
+    // remove item from state
+    let array = items.filter(i => i.itemid !== item.itemid);
+    setItems(array);
 
-      dynamodb.batchGetItem(
-        params,
-        function(err, data) {
-          if (err) {
-            alert(err.message);
-          } else {
-            var items = [];
-            data.Responses.item.forEach(item => {
-              items.push({
-                itemid: item.itemid.S,
-                name: item.name.S,
-                quantity: item.quantity.S,
-                department: item.department.S,
-                image: item.image.S,
-                sale: item.sale.N,
-                price: item.price.N
-              });
-            });
-            this.setState({ finishedLoading: true, items: items });
-          }
-        }.bind(this)
-      );
-    } else {
-      this.setState({ finishedLoading: true, items: [] });
-    }
-  }
+    console.log('array using splice', array)
 
-  deleteItem(item) {
-    if (window.confirm("Are you sure you want to delte this item?")) {
-      // First remove from state
-      var array = this.state.items;
-      var index = array.indexOf(item);
-      array.splice(index, 1);
-      this.setState({ items: array });
+    // Get updated array of itemIds
+    let itemIds  = array.map(item => String(item.itemid));
+    updateShoppingList(itemIds, userid)
+  };
 
-      // Get updated array of itemIds
-      var itemIds = [];
-      array.forEach(item => itemIds.push(item.itemid));
-
-      var params = {};
-      if (itemIds.length == 0) {
-        params = {
-          TableName: "user",
-          Key: {
-            userid: {
-              S: email
-            }
-          },
-          UpdateExpression: "REMOVE lists.shoppingList",
-          ReturnValues: "UPDATED_NEW"
-        };
-      } else {
-        params = {
-          TableName: "user",
-          Key: {
-            userid: {
-              S: email
-            }
-          },
-          UpdateExpression: "SET lists = :lists",
-          ExpressionAttributeValues: {
-            ":lists": {
-              M: {
-                shoppingList: {
-                  SS: itemIds
-                }
-              }
-            }
-          },
-          ReturnValues: "UPDATED_NEW"
-        };
-      }
-
-      dynamodb.updateItem(params, function(err, data) {
-        if (err) {
-          alert(JSON.stringify(err));
-        } else {
-          console.log("Removed from Shopping List: " + data);
-        }
-      });
-    }
-  }
-
-  addToCart(item) {
-    if (localStorage.getItem("cart") != null) {
-      var cartString = localStorage.getItem("cart");
-      var cart = JSON.parse(cartString);
-
-      var quantity = 0;
-      if (cart.hasOwnProperty(item.itemid)) {
-        quantity = cart[item.itemid];
-      }
-      item.quantityInCart = quantity + 1;
-      cart[item.itemid] = item;
-      localStorage.setItem("cart", JSON.stringify(cart));
-      toast.error("Added to cart");
-    } else {
-      var cart = {};
-      item.quantityInCart = 1;
-      cart[item.itemid] = item;
-      localStorage.setItem("cart", JSON.stringify(cart));
-      toast.error("Added to cart");
-    }
-  }
-
-  handleItemClick(item) {
-    this.props.history.push({
+  const handleItemClick = item => {
+    history.push({
       pathname: "item",
       search: "?id=" + item.itemid
     });
-  }
+  };
 
-  renderShoppingList() {
+  const renderShoppingList = () => {
     const placeHolder = {
       textAlign: "center",
       marginTop: "20vh",
       color: "gray"
     };
 
-    if (cognitoUser == null) {
+    if (userid == null) {
       return (
         <div style={placeHolder}>
           <h2>You must be logged in to view your list.</h2>
@@ -229,7 +65,7 @@ class ShoppingList extends Component {
           </h4>
         </div>
       );
-    } else if (this.state.items.length !== 0) {
+    } else if (items.length !== 0) {
       // Mobile
       if (window.innerWidth < 550) {
         const webkitEllipsis = {
@@ -239,21 +75,21 @@ class ShoppingList extends Component {
           overflow: "hidden"
         };
 
-        return this.state.items.map(item => (
-          <div>
+        return items.map(item => (
+          <div key={item.itemid}>
             <hr />
             <p
               style={{ cursor: "pointer", float: "right" }}
-              class="primaryRedWithHover"
-              onClick={() => this.deleteItem(item)}
+              className="primaryRedWithHover"
+              onClick={() => deleteItem(item)}
             >
-              <i class="fa fa-trash" />
+              <i className="fa fa-trash" />
             </p>
             <div style={{ height: "100px", width: "100px" }}>
               <img
                 className="img-responsive"
                 src={item.image}
-                onClick={() => this.handleItemClick(item)}
+                onClick={() => handleItemClick(item)}
               />
             </div>
             <div style={{ marginLeft: "120px", marginTop: "-120px" }}>
@@ -261,11 +97,11 @@ class ShoppingList extends Component {
               <p style={{ color: "grey", fontSize: "1.1em" }}>
                 {item.quantity}
               </p>
-              {this.renderPrice(item)}
+              {renderPrice(item)}
             </div>
             <button
-              class="primary"
-              onClick={() => this.addToCart(item)}
+              className="primary"
+              onClick={() => addToCart(item)}
               style={{ marginTop: "3%", width: "100%", height: "40px" }}
             >
               {" "}
@@ -274,8 +110,8 @@ class ShoppingList extends Component {
           </div>
         ));
       } else {
-        return this.state.items.map(item => (
-          <div>
+        return items.map(item => (
+          <div key={item.itemid}>
             <hr />
             <div
               style={{
@@ -286,17 +122,17 @@ class ShoppingList extends Component {
             >
               <p
                 style={{ cursor: "pointer" }}
-                class="primaryRedWithHover"
-                onClick={() => this.deleteItem(item)}
+                className="primaryRedWithHover"
+                onClick={() => deleteItem(item)}
               >
-                <i class="fa fa-trash" />
+                <i className="fa fa-trash" />
               </p>
             </div>
             <div style={{ height: "150px", width: "150px" }}>
               <img
                 className="img-responsive"
                 src={item.image}
-                onClick={() => this.handleItemClick(item)}
+                onClick={() => handleItemClick(item)}
               />
             </div>
             <div style={{ marginLeft: "170px", marginTop: "-170px" }}>
@@ -304,10 +140,10 @@ class ShoppingList extends Component {
               <p style={{ color: "grey", fontSize: "1.1em" }}>
                 {item.quantity}
               </p>
-              {this.renderPrice(item)}
+              {renderPrice(item)}
               <button
-                class="primary"
-                onClick={() => this.addToCart(item)}
+                className="primary"
+                onClick={() => addToCart(item)}
                 style={{ width: "40%", maxWidth: "250px", height: "40px" }}
               >
                 {" "}
@@ -317,12 +153,12 @@ class ShoppingList extends Component {
           </div>
         ));
       }
-    } else if (this.state.finishedLoading) {
+    } else if (finishedLoading) {
       return <h2 style={placeHolder}>No Items in List</h2>;
     }
-  }
+  };
 
-  renderPrice(item) {
+  const renderPrice = item => {
     if (item.sale != 0) {
       return (
         <p style={{ color: "#D30707", fontSize: "1.2em" }}>
@@ -337,25 +173,24 @@ class ShoppingList extends Component {
         <p style={{ fontSize: "1.2em" }}>${Number(item.price).toFixed(2)}</p>
       );
     }
-  }
+  };
 
-  render() {
-    return (
-      <div>
-        <Header />
-        <div
-          id="pageBody"
-          style={{ minHeight: window.innerHeight - 245, marginBottom: "36px" }}
-        >
-          <h2 style={{ marginLeft: "10%" }}>Shopping List</h2>
-          <div style={{ margin: "2% 10% 2% 10%" }}>
-            {this.renderShoppingList()}
-          </div>
-          <ToastContainer hideProgressBar={true} autoClose={2000} />
-        </div>
-        <Footer />
+  return (
+    <div>
+      <Header />
+      <div
+        id="pageBody"
+        style={{ minHeight: window.innerHeight - 245, marginBottom: "36px" }}
+      >
+        <h2 style={{ marginLeft: "10%" }}>Shopping List</h2>
+        <div style={{ margin: "2% 10% 2% 10%" }}>{renderShoppingList()}</div>
+        <ToastContainer hideProgressBar={true} autoClose={2000} />
       </div>
-    );
-  }
-}
-export default withRouter(ShoppingList);
+      <Footer />
+    </div>
+  );
+};
+export default connect(
+  null,
+  { addToCart }
+)(withRouter(ShoppingList));
