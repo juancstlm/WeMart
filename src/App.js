@@ -7,8 +7,9 @@ import { StripeProvider } from "react-stripe-elements";
 import { themer } from "ic-snacks";
 import { wemartTheme } from "./wemartTheme";
 import {Provider} from 'react-redux'
-import store from './redux/store'
+import store, {persistor}from './redux/store'
 import "./App.css";
+import { PersistGate } from 'redux-persist/integration/react'
 
 
 themer.themeConfig = wemartTheme; //IC-Snacks theme for WeMart
@@ -20,14 +21,16 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <StripeProvider apiKey={stripeKey}>
-          <StyleRoot>
-            <Fonts assetsUrl={fonts} />
-            <BrowserRouter>
-              <Router />
-            </BrowserRouter>
-          </StyleRoot>
-        </StripeProvider>
+        <PersistGate loading={null}persistor={persistor}>
+          <StripeProvider apiKey={stripeKey}>
+            <StyleRoot>
+              <Fonts assetsUrl={fonts} />
+              <BrowserRouter>
+                <Router />
+              </BrowserRouter>
+            </StyleRoot>
+          </StripeProvider>
+        </PersistGate>
       </Provider>
     );
   }
