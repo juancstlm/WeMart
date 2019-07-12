@@ -32,7 +32,7 @@ const ScrollItem = ({ item }) => {
   }
 
   function Departments(props) {
-    return <DepartmentCard department={props.dept} />;
+    return <DepartmentCard department={props.dept} onClick={}/>;
   }
 
   function RenderScrollItem(props) {

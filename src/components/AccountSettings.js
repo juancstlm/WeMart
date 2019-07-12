@@ -26,7 +26,6 @@ import {
   CognitoUserPool
 } from "amazon-cognito-identity-js";
 import NewCardForm from "./NewCardForm";
-import AWS from "aws-sdk";
 import {poolData, dynamoDB as dynamodb, lambda} from "../services/api";
 
 let newAddressStyle = {

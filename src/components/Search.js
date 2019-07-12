@@ -125,7 +125,7 @@ const Search = ({ history, location }) => {
           aria-expanded="true"
         >
           Sorting by
-          <span className="caret"></span>
+          <span className="cart"/>
         </button>
         <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
           <li>

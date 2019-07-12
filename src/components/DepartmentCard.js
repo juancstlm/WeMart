@@ -37,7 +37,7 @@ const DepartmentCard = ({ history, department, onClick, loading }) => {
   );
 
   const card = (
-    <div style={gridItem} onClick={() => onClick()}>
+    <div style={gridItem} onClick={onClick}>
       <img
         alt={department.image}
         src={department.image}

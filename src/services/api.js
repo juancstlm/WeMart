@@ -46,7 +46,6 @@ export const getCogtnioUser = () => {
           console.log(err);
           reject(null);
         }
-        // Necessary because the closure has no access to this.state
         cognitoUser.getUserAttributes(function(err, result) {
           if (err) {
             console.log(err);
@@ -140,7 +139,6 @@ export const getSavingsItems = limit => {
         console.log(JSON.stringify(err));
         reject(null);
       } else {
-        console.log(data.Items);
         let items = data.Items.map(element => {
           return unmarshallObject(element);
         });
@@ -362,3 +360,6 @@ export const updateShoppingList = (items, userid) => {
     });
   })
 }
+
+// Gets the sales tax given a zip code
+export const getSalesTax = zipcode => 0.0925;

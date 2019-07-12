@@ -7,7 +7,7 @@ import onSaleBadge from "../images/onSaleBadge.png";
 import { withRouter } from "react-router-dom";
 import { addToCart, removeFromCart, updateQuantity } from "../redux/actions";
 import { connect } from "react-redux";
-import {getItemInCartById, getQuantityInCartById} from "../redux/selectors";
+import { getQuantityInCartById } from "../redux/selectors";
 
 //STYLES
 //Add To cart button Style
@@ -79,32 +79,11 @@ const ItemCard = ({
   inCart,
   addToCart,
   removeFromCart,
-  updateQuantity
+  updateQuantity,
+  history
 }) => {
   const { image, itemid, name, price, quantity, sale } = item;
 
-  const updateQuantityFromCart = () => {
-    if (localStorage.getItem("cart") !== null) {
-      var cartString = localStorage.getItem("cart");
-      var cart = JSON.parse(cartString);
-      if (cart.hasOwnProperty(itemid)) {
-        console.log("Local storage cart", cart);
-        addToCart(cart[itemid]);
-        var inCart = cart[itemid].inCart;
-        this.setState({
-          inCart: inCart
-        });
-      } else {
-        this.setState({
-          inCart: 0
-        });
-      }
-    } else {
-      this.setState({
-        inCart: 0
-      });
-    }
-  };
 
   // Renders the item price.
   // If sale price is zero then it renders normally, otherwise
@@ -128,7 +107,7 @@ const ItemCard = ({
   // Currently "On Sale" is the only badge.
   const renderBadge = () => {
     if (sale !== 0) {
-      return <div style={itemCard_badge_onSale}></div>;
+      return <div style={itemCard_badge_onSale}/>;
     }
   };
 
@@ -205,31 +184,11 @@ const ItemCard = ({
   // Remove the item from the cart
   const handleRemove = () => {
     removeFromCart(item);
-
-    // var inCart = this.state.inCart;
-    // if (localStorage.getItem("cart") != null) {
-    //   var cartString = localStorage.getItem("cart");
-    //   var cart = JSON.parse(cartString);
-    //   if (cart.hasOwnProperty(itemid)) {
-    //     inCart = 0;
-    //     // cart[itemid] = quantity
-    //     delete cart[itemid];
-    //     localStorage.setItem("cart", JSON.stringify(cart));
-    //     console.log(
-    //       "Quantity of item with itemid " +
-    //         itemid +
-    //         " is " +
-    //         inCart
-    //     );
-    //     this.setState({ inCart: inCart });
-    //     console.log("State " + this.state.inCart);
-    //   }
-    // }
   };
 
   // Redirect to the item's product page.
   const handleItemClicked = () => {
-    this.props.history.push({
+    history.push({
       pathname: "/item",
       search: "?id=" + itemid
     });
@@ -238,23 +197,6 @@ const ItemCard = ({
   const handleAddToCart = () => {
     console.log("item added to cart :", item);
     addToCart(item, 1);
-    // console.log("Prop quantity is " + quantity);
-    // if (localStorage.getItem("cart") != null) {
-    //   var cartString = localStorage.getItem("cart");
-    //   console.log(cartString);
-    //   var cart = JSON.parse(cartString);
-    //   inCart += 1;
-    //   item.inCart = inCart;
-    //   cart[itemid] = item;
-    //   localStorage.setItem("cart", JSON.stringify(cart));
-    //   this.setState({ inCart: inCart });
-    // } else {
-    //   var cart = {};
-    //   item.inCart = ++inCart;
-    //   cart[itemid] = item;
-    //   localStorage.setItem("cart", JSON.stringify(cart));
-    //   this.setState({ inCart: inCart });
-    // }
   };
 
   if (name) {
@@ -347,11 +289,19 @@ const ItemCard = ({
     );
   }
 };
-export default connect( (state, ownProps)=> ({inCart: getQuantityInCartById(state,ownProps.item.itemid)}),
+export default connect(
+  (state, ownProps) => ({
+    inCart: getQuantityInCartById(state, ownProps.item.itemid)
+  }),
   { addToCart, removeFromCart, updateQuantity }
 )(withRouter(ItemCard));
 
 ItemCard.propTypes = {
   item: PropTypes.object.isRequired,
   inCart: PropTypes.number,
+  onItemClicked: PropTypes.func,
+  onAddToCart: PropTypes.func,
+  onIncrease: PropTypes.func,
+  onDecrease: PropTypes.func,
+  onRemoveFromCart: PropTypes.func
 };

@@ -6,6 +6,8 @@ import "./header.css";
 import Cart from "./Cart";
 import { Icon } from "ic-snacks";
 import { poolData } from "../services/api";
+import { Hits, SearchBox, connectAutoComplete } from "react-instantsearch-dom";
+import Autocomplete from "./common/Autocomplete";
 
 //Styles
 const astext = {
@@ -381,27 +383,7 @@ class Header extends Component {
                   className="form-group"
                   style={{ position: "relative", margin: "15px 0" }}
                 >
-                  <form
-                    className="form-inline form-horizontal"
-                    onSubmit={this.handleSearch}
-                  >
-                    <input
-                      name="search"
-                      value={query}
-                      onChange={this.handleSearchChange}
-                      type="text"
-                      placeholder="Search"
-                      className="form-control"
-                      style={{ width: "100%", fontSize: "16px" }}
-                    />
-                    <button
-                      type="submit"
-                      className="btn btn-danger btn-sm"
-                      style={searchBtn}
-                    >
-                      <i className="fas fa-search" />
-                    </button>
-                  </form>
+                  <Autocomplete />
                 </div>
               </div>
             </div>
@@ -490,32 +472,7 @@ class Header extends Component {
                 className="nav navbar-nav"
                 style={{ width: "55%", marginLeft: "25px" }}
               >
-                <form
-                  className="form-inline"
-                  onSubmit={this.handleSearch}
-                  style={{ position: "relative", margin: "15px 0" }}
-                >
-                  <input
-                    name="search"
-                    value={query}
-                    onChange={this.handleSearchChange}
-                    type="text"
-                    placeholder="Search"
-                    className="form-control"
-                    style={{ width: "80%" }}
-                  />
-                  <button
-                    type="submit"
-                    className="primary"
-                    style={{
-                      height: "34px",
-                      width: "44px",
-                      borderRadius: "4px"
-                    }}
-                  >
-                    <i className="fas fa-search" />
-                  </button>
-                </form>
+                <Autocomplete />
               </ul>
 
               <ul

@@ -1,4 +1,4 @@
-import { ADD_TO_CART, REMOVE_FROM_CART, UPDATE_QUANTITY } from "../actionTypes";
+import { ADD_TO_CART, REMOVE_FROM_CART, UPDATE_QUANTITY, CLEAR_CART } from "../actionTypes";
 
 const initialState = {
   items: [],
@@ -23,6 +23,8 @@ export default (state = initialState, action) => {
         ...state,
         quantityById: { ...state.quantityById, [itemid]: state.quantityById[itemid] + action.quantity }
       };
+    case CLEAR_CART:
+      return initialState;
     default:
       return state;
   }
