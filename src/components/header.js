@@ -6,8 +6,8 @@ import "./header.css";
 import Cart from "./Cart";
 import { Icon } from "ic-snacks";
 import { poolData } from "../services/api";
-import { Hits, SearchBox, connectAutoComplete } from "react-instantsearch-dom";
 import Autocomplete from "./common/Autocomplete";
+import SearchBox from "./common/searchbox/SearchBox";
 
 //Styles
 const astext = {
@@ -384,6 +384,8 @@ class Header extends Component {
                   style={{ position: "relative", margin: "15px 0" }}
                 >
                   <Autocomplete />
+
+                  <SearchBox />
                 </div>
               </div>
             </div>
@@ -473,6 +475,7 @@ class Header extends Component {
                 style={{ width: "55%", marginLeft: "25px" }}
               >
                 <Autocomplete />
+                <SearchBox />
               </ul>
 
               <ul
