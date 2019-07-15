@@ -384,8 +384,6 @@ class Header extends Component {
                   style={{ position: "relative", margin: "15px 0" }}
                 >
                   <Autocomplete />
-
-                  <SearchBox />
                 </div>
               </div>
             </div>
@@ -475,7 +473,6 @@ class Header extends Component {
                 style={{ width: "55%", marginLeft: "25px" }}
               >
                 <Autocomplete />
-                <SearchBox />
               </ul>
 
               <ul

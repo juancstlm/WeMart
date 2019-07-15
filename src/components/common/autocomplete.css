@@ -1,5 +1,5 @@
 .searchBox {
-  max-width: 600px;
+    margin: auto;
 }
 .autocomplete {
   position: absolute;
