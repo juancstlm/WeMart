@@ -7,7 +7,6 @@ import Cart from "./Cart";
 import { Icon } from "ic-snacks";
 import { poolData } from "../services/api";
 import Autocomplete from "./common/Autocomplete";
-import SearchBox from "./common/searchbox/SearchBox";
 
 //Styles
 const astext = {

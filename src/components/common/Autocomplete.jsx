@@ -30,7 +30,13 @@ const Autocomplete = ({ hits, currentRefinement, refine, history }) => {
 
   return (
     <div className={"searchBox"}>
-      <SearchBox defaultRefinement="" />
+      <SearchBox
+        translations={{
+          submitTitle: "Submit your search query.",
+          resetTitle: "Clear your search query.",
+          placeholder: "Search WeMart..."
+        }}
+      />
       {autocompleteResults}
     </div>
   );
