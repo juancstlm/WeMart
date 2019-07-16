@@ -1,12 +1,12 @@
 import Header from "./header";
 import Footer from "./Footer";
-import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+import React, {Component} from "react";
+import {withRouter} from "react-router-dom";
 import HorizontalScroll from "./HorizontalScroll";
 import Counter from "./Counter";
-import { ToastContainer, toast } from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { dynamoDB as dynamodb } from "../services/api";
+import {dynamoDB as dynamodb} from "../services/api";
 
 var AmazonCognitoIdentity = require("amazon-cognito-identity-js");
 

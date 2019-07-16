@@ -1,10 +1,6 @@
-import AWS from "aws-sdk";
-import {
-  CognitoUserAttribute,
-  CognitoUserPool
-} from "amazon-cognito-identity-js";
-import { DynamoDB } from "aws-sdk";
-import { Marshaller } from "@aws/dynamodb-auto-marshaller";
+import AWS, {DynamoDB} from "aws-sdk";
+import {CognitoUserPool} from "amazon-cognito-identity-js";
+import {Marshaller} from "@aws/dynamodb-auto-marshaller";
 
 const marshaller = new Marshaller({ unwrapNumbers: true });
 
@@ -46,6 +42,7 @@ export const getCogtnioUser = () => {
           console.log(err);
           reject(null);
         }
+        console.log('user session', session)
         cognitoUser.getUserAttributes(function(err, result) {
           if (err) {
             console.log(err);

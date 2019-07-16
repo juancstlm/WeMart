@@ -1,6 +1,5 @@
 import React from "react";
 import ScrollItem from "./ScrollItem";
-import { ScrollTrack } from 'ic-snacks'
 
 const HorizontalScroll = props => {
   const items = props.items.map(item => {

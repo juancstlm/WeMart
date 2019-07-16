@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import TextFileReader from './TextFileReader'
 import Header from './header';
 import Footer from './Footer'

@@ -1,12 +1,15 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import logo from "../images/logo.png";
-import { withRouter } from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group"; // ES6
 import "./header.css";
 import Cart from "./Cart";
-import { Icon } from "ic-snacks";
-import { poolData } from "../services/api";
+import {Icon} from "ic-snacks";
+import {poolData} from "../services/api";
 import Autocomplete from "./common/Autocomplete";
+import {connect} from "react-redux";
+import {getZipCode} from "../redux/selectors";
+import {Overlay} from "./common/overlay/overlay";
 
 //Styles
 const astext = {
@@ -40,16 +43,6 @@ const pillsLi = {
   fontSize: "1em",
   marginBottom: "8px",
   textAlign: "center"
-};
-
-const searchBtn = {
-  position: "absolute",
-  backgroundColor: "#D30707",
-  top: "0",
-  right: "0",
-  zIndex: "2",
-  height: "34px",
-  width: "50px"
 };
 
 const mobileNav = {
@@ -90,21 +83,8 @@ class Header extends Component {
       cartClicked: false,
       isLoggedIn: false
     };
-
-    this.props.history.listen((location, action) => {
-      setTimeout(
-        function() {
-          this.getSearchValue();
-        }.bind(this),
-        100
-      );
-    });
-
-    this.handleSearch = this.handleSearch.bind(this);
-    this.handleSearchChange = this.handleSearchChange.bind(this);
     this.getCurrentUser();
     this.checkZip();
-    this.getSearchValue();
     this.handleSignOut = this.handleSignOut.bind(this);
   }
 
@@ -131,16 +111,6 @@ class Header extends Component {
     this.setState({ width: window.innerWidth });
   };
 
-  getSearchValue() {
-    if (this.props.location !== undefined) {
-      const queryParams = new URLSearchParams(this.props.location.search);
-      let special = queryParams.get("special");
-      if (special !== "true") {
-        query = queryParams.get("query");
-      }
-    }
-  }
-
   checkZip() {
     if (localStorage.getItem("zip") == null) {
       if (cognitoUser === null) {
@@ -161,33 +131,13 @@ class Header extends Component {
     cognitoUser = userPool.getCurrentUser();
   }
 
-  handleSearch(event) {
-    //search logic
-    event.preventDefault();
-    this.props.history.push({
-      pathname: "search",
-      search: "?query=" + query
-    });
-  }
-
-  handleSearchChange(event) {
-    query = event.target.value;
-    this.setState({ value: event.target.value });
-  }
-
   showCart = () => {
-    //when cart button is clicked
-    console.log("cart is clicked");
     const bool = !this.state.cartClicked;
     this.setState({ cartClicked: bool });
-    var body = document.querySelector("#pageBody");
-    body.classList.add("overlay");
   };
 
-  closeCart = cartClicked => {
-    this.setState({ cartClicked });
-    var body = document.querySelector("#pageBody");
-    body.classList.remove("overlay");
+  closeCart = () => {
+    this.setState({ cartClicked: false });
   };
 
   handleDepartments = e => {
@@ -346,6 +296,7 @@ class Header extends Component {
               zIndex: "10"
             }}
           >
+
             <div className="row" style={{ marginTop: "3%" }}>
               <div className="container-fluid" style={center}>
                 <div style={{ paddingLeft: "0" }} className="col-xs-2">
@@ -453,6 +404,7 @@ class Header extends Component {
               borderRadius: "0"
             }}
           >
+            <Overlay active={this.state.cartClicked} onClick={this.closeCart}/>
             <div className="container-fluid" style={center}>
               <div
                 className="navbar-header"
@@ -485,7 +437,7 @@ class Header extends Component {
                     onClick={this.handleZipClick}
                   >
                     <Icon name="locationMarkerFilled" /> &nbsp;
-                    {zip}
+                    {this.props.zipCode}
                   </button>
                 </li>
 
@@ -553,4 +505,6 @@ class Header extends Component {
     }
   }
 }
-export default withRouter(Header);
+export default connect(state => ({
+  zipCode: getZipCode(state)
+}))(withRouter(Header));

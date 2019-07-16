@@ -1,32 +1,19 @@
 import React from "react";
 import "../stylesheets/AccountSettings.css";
-import { StyleRoot } from "radium";
-import {
-  Button,
-  Column,
-  Form,
-  Icon,
-  Link,
-  MenuItem,
-  Row,
-  Select,
-  TextField
-} from "ic-snacks";
+import {StyleRoot} from "radium";
+import {Button, Column, Form, Icon, Link, MenuItem, Row, Select, TextField} from "ic-snacks";
 import AddressCard from "./AddressCard";
 import ProfilePanel from "./ProfilePanel";
 import Line from "./Line";
-import { Modal } from "react-bootstrap";
+import {Modal} from "react-bootstrap";
 import CreditCard from "./CreditCard";
-import { Elements } from "react-stripe-elements";
+import {Elements} from "react-stripe-elements";
 import Header from "./header";
 import Footer from "./Footer";
-import { withRouter } from "react-router-dom";
-import {
-  CognitoUserAttribute,
-  CognitoUserPool
-} from "amazon-cognito-identity-js";
+import {withRouter} from "react-router-dom";
+import {CognitoUserAttribute, CognitoUserPool} from "amazon-cognito-identity-js";
 import NewCardForm from "./NewCardForm";
-import {poolData, dynamoDB as dynamodb, lambda} from "../services/api";
+import {dynamoDB as dynamodb, lambda, poolData} from "../services/api";
 
 let newAddressStyle = {
   textAlign: "center",

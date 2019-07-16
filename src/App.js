@@ -1,17 +1,17 @@
-import React, { Component } from "react";
-import { StyleRoot } from "radium";
+import React, {Component} from "react";
+import {StyleRoot} from "radium";
 import Fonts from "./components/Fonts";
-import { BrowserRouter } from "react-router-dom";
+import {BrowserRouter} from "react-router-dom";
 import Router from "./components/Router";
-import { StripeProvider } from "react-stripe-elements";
-import { themer } from "ic-snacks";
-import { wemartTheme } from "./wemartTheme";
-import { Provider } from "react-redux";
-import store, { persistor } from "./redux/store";
+import {StripeProvider} from "react-stripe-elements";
+import {themer} from "ic-snacks";
+import {wemartTheme} from "./wemartTheme";
+import {Provider} from "react-redux";
+import store, {persistor} from "./redux/store";
 import "./App.css";
-import { PersistGate } from "redux-persist/integration/react";
+import {PersistGate} from "redux-persist/integration/react";
 import algoliasearch from "algoliasearch/lite";
-import { InstantSearch } from "react-instantsearch-dom";
+import {InstantSearch} from "react-instantsearch-dom";
 
 const searchClient = algoliasearch(
   "8AHZ7T8E5B",

@@ -1,27 +1,21 @@
 import React from "react";
-import { Elements } from "react-stripe-elements";
+import {Elements} from "react-stripe-elements";
 import Header from "./header";
-import {
-  Button,
-  Form,
-  MenuItem,
-  Select,
-  TextField
-} from "ic-snacks";
+import {Button, Form, MenuItem, Select, TextField} from "ic-snacks";
 import CheckoutPanel from "./CheckoutPanel";
 import AddressCard from "./AddressCard";
-import { StyleRoot } from "radium";
+import {StyleRoot} from "radium";
 import CreditCard from "./CreditCard";
 import OrderItems from "./OrderItems";
 import NewCardForm from "./NewCardForm";
-import { CognitoUserPool } from "amazon-cognito-identity-js";
+import {CognitoUserPool} from "amazon-cognito-identity-js";
 import AWS from "aws-sdk";
 import Footer from "./Footer";
 
-import { ToastContainer, toast } from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import {poolData, dynamoDB as dynamodb} from "../services/api";
+import {dynamoDB as dynamodb, poolData} from "../services/api";
 
 const stripeKey = process.env.REACT_APP_STRIPE_API_KEY;
 const tax = 0.0925;

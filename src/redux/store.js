@@ -1,10 +1,10 @@
-import { applyMiddleware, createStore } from "redux";
-import { createLogger } from "redux-logger/src";
+import {applyMiddleware, createStore} from "redux";
+import {createLogger} from "redux-logger/src";
 import thunk from "redux-thunk";
 import freeze from "redux-freeze";
 import rootReducer from "./rootreducer";
 import _ from "lodash";
-import {persistStore, persistReducer } from "redux-persist";
+import {persistReducer, persistStore} from "redux-persist";
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
 
 

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import ItemCard from "./ItemCard";
 import DepartmentCard from "./DepartmentCard";
 

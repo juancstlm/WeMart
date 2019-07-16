@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import TextFileReader from './TextFileReader'
 import location from '../images/SanJose2.jpg'
 import Header from './header';

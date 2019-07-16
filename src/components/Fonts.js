@@ -1,6 +1,6 @@
-import React, { Component }       from 'react'
-import PropTypes                  from 'prop-types'
-import { Style }          from 'radium'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
+import {Style} from 'radium'
 
 // Code adapted from https://github.com/instacart/Snacks/blob/master/src/styles/SetStyles.js
 

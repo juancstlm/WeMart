@@ -1,10 +1,8 @@
-import React, { Component } from 'react';
-import { withRouter } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { Modal } from "react-bootstrap";
+import React, {Component} from 'react';
+import {Link, withRouter} from "react-router-dom";
+import {Modal} from "react-bootstrap";
 import Radium from 'radium';
-import validator from 'validator';
-import { Form, TextField, Button, Icon } from 'ic-snacks';
+import {Button, Icon, TextField} from 'ic-snacks';
 
 
 class Footer extends Component {

@@ -1,6 +1,5 @@
-import { filter } from "ic-snacks/dist/esm/components/SVGIcon/icons";
-
 export const getCartState = store => store.cart;
+export const getUserState = store => store.user;
 
 // Returns an array of all the item objects in the cart
 export const getItemsInCart = store =>
@@ -26,3 +25,8 @@ export const getCartTotal = store =>
         0
       )
     : 0;
+
+export const getZipCode = store =>
+  getUserState(store) && getUserState(store).zipCode
+    ? getUserState(store).zipCode
+    : null;

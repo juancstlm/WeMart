@@ -1,13 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Button, LoadingBox } from "ic-snacks";
-import { StyleRoot } from "radium";
+import {Button, LoadingBox} from "ic-snacks";
+import {StyleRoot} from "radium";
 import Counter from "./Counter";
 import onSaleBadge from "../images/onSaleBadge.png";
-import { withRouter } from "react-router-dom";
-import { addToCart, removeFromCart, updateQuantity } from "../redux/actions";
-import { connect } from "react-redux";
-import { getQuantityInCartById } from "../redux/selectors";
+import {withRouter} from "react-router-dom";
+import {addToCart, removeFromCart, updateQuantity} from "../redux/actions";
+import {connect} from "react-redux";
+import {getQuantityInCartById} from "../redux/selectors";
 
 //STYLES
 //Add To cart button Style

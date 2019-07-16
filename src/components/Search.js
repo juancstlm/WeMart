@@ -1,15 +1,9 @@
 import Header from "./header";
 import Footer from "./Footer";
 import ItemsGrid from "./ItemsGrid";
-import React, { useState, useEffect } from "react";
-import { withRouter } from "react-router-dom";
-import { Button, DropdownMenu, MenuItem } from "ic-snacks";
-import {
-  dynamoDB as dynamodb,
-  getDepartmentItems,
-  getSavingsItems,
-  searchItems
-} from "../services/api";
+import React, {useEffect, useState} from "react";
+import {withRouter} from "react-router-dom";
+import {getDepartmentItems, getSavingsItems, searchItems} from "../services/api";
 
 const Search = ({ history, location }) => {
   const [items, setItems] = useState([]);

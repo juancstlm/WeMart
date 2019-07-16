@@ -1,15 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import HorizontalScroll from "./HorizontalScroll";
 import Header from "./header";
 import Footer from "./Footer";
-import { withRouter } from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import itemsEmpty from "../images/items_empty.png";
-import {
-  getDepartments,
-  getSavingsItems,
-  getOrderHistory,
-  getCogtnioUser
-} from "../services/api";
+import {getCogtnioUser, getDepartments, getSavingsItems} from "../services/api";
 
 const Home = ({ history }) => {
   const [departments, setDepartments] = useState([]);

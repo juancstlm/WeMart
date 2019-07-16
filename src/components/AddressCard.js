@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Icon } from "ic-snacks";
+import {Icon} from "ic-snacks";
 
 //STYLES
 const addressCard = {

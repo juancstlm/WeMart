@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon } from "ic-snacks";
+import {Icon} from "ic-snacks";
 import PropTypes from "prop-types";
 
 //STYLES

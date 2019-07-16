@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, {useState} from "react";
 import CartList from "./cart_list";
 import "./header.css";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import { updateQuantity, removeFromCart } from "../redux/actions";
-import { getItemsInCart, getCartTotal } from "../redux/selectors";
+import {withRouter} from "react-router-dom";
+import {connect} from "react-redux";
+import {removeFromCart, updateQuantity} from "../redux/actions";
+import {getCartTotal, getItemsInCart} from "../redux/selectors";
 import PropTypes from "prop-types";
-import { getItemFromDB } from "../services/api";
 
 const Cart = ({
   onCloseClick,
@@ -17,24 +16,6 @@ const Cart = ({
   updateQuantity
 }) => {
   const [width, setWidth] = useState(800);
-
-  // const getLocalStorage = () => {
-  //   if (localStorage.getItem("cart") != null) {
-  //     var cartString = localStorage.getItem("cart");
-  //     var cart = JSON.parse(cartString);
-  //     this.state = {
-  //       cartItems: getItemsFromCart(cart),
-  //       totalPrice: 0,
-  //     };
-  //   } else {
-  //     this.state = { cartItems: [], totalPrice: 0, width: window.innerWidth };
-  //   }
-  //
-  //   getTotalPrice(cartItems);
-  //   this.handleRemove = this.handleRemove.bind(this);
-  //   this.handleIncrease = this.handleIncrease.bind(this);
-  //   this.handleDecrease = this.handleDecrease.bind(this);
-  // };
 
   const componentWillMount = () => {
     window.addEventListener("resize", this.handleWindowSizeChange);
@@ -53,56 +34,18 @@ const Cart = ({
   // Remove the item from the cart
   const handleRemove = item => {
     removeFromCart(item);
-
-    // if (localStorage.getItem("cart") != null) {
-    //   var cartString = localStorage.getItem("cart");
-    //   var cart = JSON.parse(cartString);
-    //   if (cart.hasOwnProperty(itemID)) {
-    //     delete cart[itemID];
-    //     localStorage.setItem("cart", JSON.stringify(cart));
-    //     this.setState({ cartItems: getItemsFromCart(cart) });
-    //     var event = new Event("cartChanged");
-    //     window.dispatchEvent(event);
-    //   }
-    // }
   };
 
   //Increases item quantity in cart
   const handleIncrease = item => {
     console.log("handle Increase", item);
     updateQuantity(item, 1);
-    // if (localStorage.getItem("cart") != null) {
-    //   var cartString = localStorage.getItem("cart");
-    //   var cart = JSON.parse(cartString);
-    //   if (cart.hasOwnProperty(itemID)) {
-    //     var item = cart[itemID];
-    //     item.quantityInCart += 1;
-    //     cart[itemID] = item;
-    //     localStorage.setItem("cart", JSON.stringify(cart));
-    //     this.setState({ cartItems: getItemsFromCart(cart) });
-    //     var event = new Event("cartChanged");
-    //     window.dispatchEvent(event);
-    //   }
-    // }
   };
 
   // Decreases the quantity of this item by 1 in the cart.
   const handleDecrease = item => {
     console.log("handle Increase", item);
     updateQuantity(item, -1);
-    // if (localStorage.getItem("cart") != null) {
-    //   var cartString = localStorage.getItem("cart");
-    //   var cart = JSON.parse(cartString);
-    //   if (cart.hasOwnProperty(itemID)) {
-    //     var item = cart[itemID];
-    //     item.quantityInCart -= 1;
-    //     cart[itemID] = item;
-    //     localStorage.setItem("cart", JSON.stringify(cart));
-    //     this.setState({ cartItems: this.getItemsFromCart(cart) });
-    //     var event = new Event("cartChanged");
-    //     window.dispatchEvent(event);
-    //   }
-    // }
   };
 
   const handleCheckoutClick = () => {

@@ -1,16 +1,12 @@
 import Header from "./header";
 import Footer from "./Footer";
-import React, { useState, useEffect } from "react";
-import { withRouter, Link } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import React, {useEffect, useState} from "react";
+import {Link, withRouter} from "react-router-dom";
+import {ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  getCogtnioUser,
-  getShoppingListItemsIds,
-  getItems, updateShoppingList
-} from "../services/api";
-import { addToCart } from "../redux/actions";
-import { connect } from "react-redux";
+import {getCogtnioUser, getItems, getShoppingListItemsIds, updateShoppingList} from "../services/api";
+import {addToCart} from "../redux/actions";
+import {connect} from "react-redux";
 
 const ShoppingList = ({ addToCart, history }) => {
   const [finishedLoading, setFinishedLoading] = useState(false);

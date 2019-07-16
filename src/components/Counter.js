@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Button, Icon } from "ic-snacks";
 
 let spanStyle = {
   width: "24%",

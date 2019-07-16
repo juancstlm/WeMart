@@ -1,12 +1,8 @@
 import React from "react";
-import {
-  connectAutoComplete,
-  SearchBox,
-  Highlight
-} from "react-instantsearch-dom";
+import {connectAutoComplete, SearchBox} from "react-instantsearch-dom";
 import "./autocomplete.css";
 import AutocompleteHit from "./AutocompleteHit";
-import { withRouter } from "react-router-dom";
+import {withRouter} from "react-router-dom";
 
 const Autocomplete = ({ hits, currentRefinement, refine, history }) => {
   const handleOnHitClick = itemid => {

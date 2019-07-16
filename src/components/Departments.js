@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { withRouter } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {withRouter} from "react-router-dom";
 import Header from "./header";
 import Footer from "./Footer";
-import { getDepartments } from "../services/api";
+import {getDepartments} from "../services/api";
 import DepartmentCard from "./DepartmentCard";
 import PropTypes from "prop-types";
 

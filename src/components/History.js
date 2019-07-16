@@ -1,13 +1,12 @@
-import { withRouter } from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import Header from "./header";
 import Footer from "./Footer";
 import React from "react";
-import { Button, DropdownMenu, MenuItem } from "ic-snacks";
+import {Button} from "ic-snacks";
 import itemsEmpty from "../images/items_empty.png";
-import { CognitoUserPool } from "amazon-cognito-identity-js";
-import { DynamoDB } from "aws-sdk";
+import {CognitoUserPool} from "amazon-cognito-identity-js";
 import ItemsGrid from "./ItemsGrid";
-import { poolData, dynamoDB as dynamodb } from "../services/api";
+import {dynamoDB as dynamodb, poolData} from "../services/api";
 
 var cognitoUser;
 //Styles

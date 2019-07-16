@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import { Form, TextField } from "ic-snacks";
+import React, {Component} from "react";
+import {Form, TextField} from "ic-snacks";
 import background from "../images/background.svg";
 import "../App.css";
-import { withRouter } from "react-router-dom";
-import { DynamoDB } from "aws-sdk/index";
+import {withRouter} from "react-router-dom";
+import {DynamoDB} from "aws-sdk/index";
 import wemartLogo from "../images/logo.png";
-import { ToastContainer, toast } from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AWS from "aws-sdk";
 import {poolData} from "../services/api";

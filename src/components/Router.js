@@ -1,6 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
-
+import {Route, Switch} from 'react-router-dom';
 // All pages here
 import Checkout from "./Checkout";
 import SignUp from './SignUp'
@@ -19,7 +18,6 @@ import AboutUs from './AboutUs'
 import Locations from './Locations'
 import Privacy from './Privacy'
 import Terms from './Terms'
-
 
 
 const Router = () => (

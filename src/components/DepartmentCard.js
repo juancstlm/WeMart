@@ -1,7 +1,7 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
-import { PropTypes } from "prop-types";
-import { LoadingBox } from "ic-snacks";
+import {withRouter} from "react-router-dom";
+import {PropTypes} from "prop-types";
+import {LoadingBox} from "ic-snacks";
 
 const DepartmentCard = ({ history, department, onClick, loading }) => {
   const gridItem = {

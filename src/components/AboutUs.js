@@ -1,10 +1,9 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import TextFileReader from "./TextFileReader";
 import aboutus from "../images/aboutus.jpg";
 import Header from "./header";
 import Footer from "./Footer";
 import Radium from "radium";
-
 //Team Pictures
 import aayush from "../images/Team/Aayush.jpg";
 import ian from "../images/Team/Ian.jpg";
