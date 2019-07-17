@@ -1,6 +1,6 @@
 import React from "react";
 import CartListItem from "./cart_list_item";
-import itemsEmpty from "../images/items_empty.png";
+import itemsEmpty from "../../images/items_empty.png";
 
 const CartList = ({ items, handleRemove, handleIncrease, handleDecrease }) => {
   const renderItems = () => items.map(item => {

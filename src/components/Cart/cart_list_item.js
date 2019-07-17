@@ -1,7 +1,7 @@
 import React from "react";
-import Counter from "./Counter";
+import Counter from "../Counter";
 import {connect} from "react-redux";
-import {getQuantityInCartById} from "../redux/selectors";
+import {getQuantityInCartById} from "../../redux/selectors";
 
 const CartItem = ({
   item,

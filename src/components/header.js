@@ -3,7 +3,7 @@ import logo from "../images/logo.png";
 import {withRouter} from "react-router-dom";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group"; // ES6
 import "./header.css";
-import Cart from "./Cart";
+import Cart from "./Cart/Cart";
 import {Icon} from "ic-snacks";
 import {poolData} from "../services/api";
 import Autocomplete from "./common/Autocomplete";
@@ -296,7 +296,7 @@ class Header extends Component {
               zIndex: "10"
             }}
           >
-
+            <Overlay active={this.state.cartClicked} onClick={this.closeCart}/>
             <div className="row" style={{ marginTop: "3%" }}>
               <div className="container-fluid" style={center}>
                 <div style={{ paddingLeft: "0" }} className="col-xs-2">
@@ -331,7 +331,7 @@ class Header extends Component {
               <div className="container-fluid">
                 <div
                   className="form-group"
-                  style={{ position: "relative", margin: "15px 0" }}
+                  style={{ position: "relative", margin: "15px 0 0 0" }}
                 >
                   <Autocomplete />
                 </div>

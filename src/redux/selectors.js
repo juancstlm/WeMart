@@ -15,7 +15,8 @@ export const getQuantityInCartById = (store, id) =>
     ? getCartState(store).quantityById[Number(id)]
     : 0;
 
-export const getCartTotal = store =>
+// Gets the total price of the cart with savings
+export const getCartTotalWithSavings = store =>
   getItemsInCart(store)
     ? getItemsInCart(store).reduce(
         (total, item) =>
@@ -26,6 +27,16 @@ export const getCartTotal = store =>
       )
     : 0;
 
+// Gets the full price of all the items in cart, ignoring sale prices or discounts
+export const getCartTotal = store =>
+  getItemsInCart(store)
+    ? getItemsInCart(store).reduce(
+        (total, item) =>
+          total + item.price * getQuantityInCartById(store, item.itemid), 0
+      )
+    : 0;
+
+// Gets the zip code entered by the current user
 export const getZipCode = store =>
   getUserState(store) && getUserState(store).zipCode
     ? getUserState(store).zipCode
