@@ -62,17 +62,17 @@ const mobileNavItems = {
   width: "33%"
 };
 
-const links = {
-  color: "#D30707",
-  fontSize: "1.25em",
-  textAlign: "center"
-};
+//TODO redo the header mobile links
+//
+// const links = {
+//   color: "#D30707",
+//   fontSize: "1.25em",
+//   textAlign: "center"
+// };
 
 var AmazonCognitoIdentity = require("amazon-cognito-identity-js");
 
-var zip;
 var cognitoUser;
-let query = "";
 
 class Header extends Component {
   constructor(props) {
@@ -84,7 +84,6 @@ class Header extends Component {
       isLoggedIn: false
     };
     this.getCurrentUser();
-    this.checkZip();
     this.handleSignOut = this.handleSignOut.bind(this);
   }
 
@@ -111,18 +110,6 @@ class Header extends Component {
     this.setState({ width: window.innerWidth });
   };
 
-  checkZip() {
-    if (localStorage.getItem("zip") == null) {
-      if (cognitoUser === null) {
-        this.props.history.push("/");
-      } else {
-        localStorage.setItem("zip", "95112");
-        zip = "95112";
-      }
-    } else {
-      zip = localStorage.getItem("zip");
-    }
-  }
 
   getCurrentUser() {
     // Get poolData
@@ -309,6 +296,7 @@ class Header extends Component {
                 >
                   <a href="/home">
                     <img
+                      alt={'logo'}
                       src={logo}
                       style={{ height: "35px", backgroundColor: "clear" }}
                     />
@@ -342,34 +330,28 @@ class Header extends Component {
               <div className="container">
                 <ul className="nav nav-tabs" style={mobileNav}>
                   <li style={mobileNavItems}>
-                    <a style={links} href="">
                       <button style={astext} onClick={this.handleDepartments}>
                         <i className="fas fa-th-large" />
                         <br />
                         <span>Aisles</span>
                       </button>
-                    </a>
                   </li>
 
                   <li style={mobileNavItems}>
                     {" "}
-                    <a style={links} href="">
                       <button style={astext} onClick={this.handleSavingsClick}>
                         <i className="fas fa-tag" />
                         <br />
                         <span>Savings</span>
                       </button>
-                    </a>
                   </li>
 
                   <li style={mobileNavItems}>
-                    <a style={links} href="">
                       <button style={astext} onClick={this.handleHistoryClick}>
                         <i className="fas fa-history" />
                         <br />
                         <span>History</span>
                       </button>
-                    </a>
                   </li>
                 </ul>
               </div>

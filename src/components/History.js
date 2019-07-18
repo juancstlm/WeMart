@@ -156,7 +156,7 @@ class History extends React.Component {
             this.setState({ orderHistory: set });
           });
         });
-        if (data.Items.length == 0) {
+        if (data.Items.length === 0) {
           this.setState({ isLoaded: true });
         }
         this.getItemsFromDB();
@@ -194,7 +194,7 @@ class History extends React.Component {
             <div style={panel}>
               <div style={noItems}>
                 <div>
-                  <img src={itemsEmpty} style={noItemsImage} />
+                  <img alt='no items' src={itemsEmpty} style={noItemsImage} />
                 </div>
                 <h1>No Items</h1>
                 <h4>
@@ -225,7 +225,7 @@ class History extends React.Component {
           <div style={panel}>
             <div style={noItems}>
               <div>
-                <img src={itemsEmpty} style={noItemsImage} />
+                <img alt="no items" src={itemsEmpty} style={noItemsImage} />
               </div>
               <h1>No Items</h1>
               <h4>
@@ -252,24 +252,24 @@ class History extends React.Component {
 
   // Written by https://github.com/timroesner
   sortBy(option) {
-    if (option == "lowtohigh") {
+    if (option === "lowtohigh") {
       this.setState({
         items: this.state.items.sort(function(a, b) {
-          let priceA = a.sale != 0 ? a.sale : a.price;
-          let priceB = b.sale != 0 ? b.sale : b.price;
+          let priceA = a.sale !== 0 ? a.sale : a.price;
+          let priceB = b.sale !== 0 ? b.sale : b.price;
           console.log(priceB);
           return priceA - priceB;
         })
       });
-    } else if (option == "hightolow") {
+    } else if (option === "hightolow") {
       this.setState({
         items: this.state.items.sort(function(a, b) {
-          let priceA = a.sale != 0 ? a.sale : a.price;
-          let priceB = b.sale != 0 ? b.sale : b.price;
+          let priceA = a.sale !== 0 ? a.sale : a.price;
+          let priceB = b.sale !== 0 ? b.sale : b.price;
           return priceB - priceA;
         })
       });
-    } else if (option == "name") {
+    } else if (option === "name") {
       this.setState({
         items: this.state.items.sort(function(a, b) {
           return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
@@ -312,7 +312,7 @@ class History extends React.Component {
           aria-expanded="true"
         >
           Sorting by
-          <span className="caret"></span>
+          <span className="caret"/>
         </button>
         <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
           <li>

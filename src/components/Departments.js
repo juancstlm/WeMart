@@ -42,15 +42,6 @@ const Departments = ({ history, initialLoad }) => {
     });
   };
 
-  const gridContainer = {
-    display: "flex",
-    marginBottom: "0",
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    alignContent: 'center',
-    width: "90%"
-  };
-
   return (
     <div>
       <Header />

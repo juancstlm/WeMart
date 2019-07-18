@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import CartList from "./cart_list";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";

@@ -31,16 +31,16 @@ const HorizontalScroll = props => {
     WebkitOverflowScrolling: "touch"
   };
 
-  const list = {
-    position: "relative",
-    left: "0px",
-    top: "0px",
-    minWidth: "10px",
-    height: "100%",
-    width: "100%",
-    float: "none",
-    alignItems: "center"
-  };
+  // const list = {
+  //   position: "relative",
+  //   left: "0px",
+  //   top: "0px",
+  //   minWidth: "10px",
+  //   height: "100%",
+  //   width: "100%",
+  //   float: "none",
+  //   alignItems: "center"
+  // };
 
   return (
     <div style={scrollWrapper}>

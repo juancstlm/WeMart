@@ -95,7 +95,7 @@ class Item extends Component {
             console.log(err);
           } else {
             attributes.forEach(function(att) {
-              if (att.Name == "email") {
+              if (att.Name === "email") {
                 email = att.Value;
               }
             });
@@ -223,7 +223,7 @@ class Item extends Component {
         float: "left"
       };
     }
-    if (this.state.quantityInCart == 0) {
+    if (this.state.quantityInCart === 0) {
       return (
         <button
           style={buttonBarStyle}
@@ -251,78 +251,86 @@ class Item extends Component {
 
   // Increases the quantity of this item in the cart
   handleIncrease = () => {
-    var quantity = this.state.quantityInCart;
-    if (localStorage.getItem("cart") != null) {
-      var cartString = localStorage.getItem("cart");
-      var cart = JSON.parse(cartString);
+    // TODO redo in redux
 
-      if (cart.hasOwnProperty(this.state.item.itemid)) {
-        var item = this.state.item;
-        item.quantityInCart = quantity + 1;
-        cart[this.state.item.itemid] = item;
-        localStorage.setItem("cart", JSON.stringify(cart));
-        this.setState({ quantityInCart: quantity + 1 });
-      }
-    }
+    // var quantity = this.state.quantityInCart;
+    // if (localStorage.getItem("cart") != null) {
+    //   var cartString = localStorage.getItem("cart");
+    //   var cart = JSON.parse(cartString);
+    //
+    //   if (cart.hasOwnProperty(this.state.item.itemid)) {
+    //     var item = this.state.item;
+    //     item.quantityInCart = quantity + 1;
+    //     cart[this.state.item.itemid] = item;
+    //     localStorage.setItem("cart", JSON.stringify(cart));
+    //     this.setState({ quantityInCart: quantity + 1 });
+    //   }
+    // }
   };
 
   // Decreases the quantity of this item by 1 in the cart.
   handleDecrease = () => {
-    var quantity = this.state.quantityInCart;
+    //TODO redo in redux
 
-    if (localStorage.getItem("cart") != null) {
-      var cartString = localStorage.getItem("cart");
-      var cart = JSON.parse(cartString);
-
-      if (cart.hasOwnProperty(this.state.item.itemid)) {
-        var item = this.state.item;
-        item.quantityInCart = quantity - 1;
-        cart[this.state.item.itemid] = item;
-        localStorage.setItem("cart", JSON.stringify(cart));
-        this.setState({ quantityInCart: quantity - 1 });
-      }
-    }
+    // var quantity = this.state.quantityInCart;
+    //
+    // if (localStorage.getItem("cart") != null) {
+    //   var cartString = localStorage.getItem("cart");
+    //   var cart = JSON.parse(cartString);
+    //
+    //   if (cart.hasOwnProperty(this.state.item.itemid)) {
+    //     var item = this.state.item;
+    //     item.quantityInCart = quantity - 1;
+    //     cart[this.state.item.itemid] = item;
+    //     localStorage.setItem("cart", JSON.stringify(cart));
+    //     this.setState({ quantityInCart: quantity - 1 });
+    //   }
+    // }
   };
 
   // Remove the item from the cart
   handleRemove = () => {
-    if (localStorage.getItem("cart") != null) {
-      var cartString = localStorage.getItem("cart");
-      var cart = JSON.parse(cartString);
+    //TODO redo in redux
 
-      if (cart.hasOwnProperty(this.state.item.itemid)) {
-        delete cart[this.state.item.itemid];
-        localStorage.setItem("cart", JSON.stringify(cart));
-        this.setState({ quantityInCart: 0 });
-      }
-    }
+    // if (localStorage.getItem("cart") != null) {
+    //   var cartString = localStorage.getItem("cart");
+    //   var cart = JSON.parse(cartString);
+    //
+    //   if (cart.hasOwnProperty(this.state.item.itemid)) {
+    //     delete cart[this.state.item.itemid];
+    //     localStorage.setItem("cart", JSON.stringify(cart));
+    //     this.setState({ quantityInCart: 0 });
+    //   }
+    // }
   };
 
   handleAddToCart = () => {
-    var quantity = this.state.quantityInCart;
-
-    if (localStorage.getItem("cart") != null) {
-      var cartString = localStorage.getItem("cart");
-      console.log(cartString);
-      var cart = JSON.parse(cartString);
-
-      if (cart.hasOwnProperty(this.state.item.itemid)) {
-        quantity = cart[this.state.item.itemid].quantityInCart;
-      }
-
-      var item = this.state.item;
-      item.quantityInCart = quantity + 1;
-      cart[this.state.item.itemid] = item;
-      localStorage.setItem("cart", JSON.stringify(cart));
-      this.setState({ quantityInCart: quantity + 1 });
-    } else {
-      var cart = {};
-      var item = this.state.item;
-      item.quantityInCart = quantity + 1;
-      cart[this.state.item.itemid] = item;
-      localStorage.setItem("cart", JSON.stringify(cart));
-      this.setState({ quantityInCart: quantity + 1 });
-    }
+    //TODO redo this in redux
+    //
+    // var quantity = this.state.quantityInCart;
+    //
+    // if (localStorage.getItem("cart") != null) {
+    //   var cartString = localStorage.getItem("cart");
+    //   console.log(cartString);
+    //   var cart = JSON.parse(cartString);
+    //
+    //   if (cart.hasOwnProperty(this.state.item.itemid)) {
+    //     quantity = cart[this.state.item.itemid].quantityInCart;
+    //   }
+    //
+    //   var item = this.state.item;
+    //   item.quantityInCart = quantity + 1;
+    //   cart[this.state.item.itemid] = item;
+    //   localStorage.setItem("cart", JSON.stringify(cart));
+    //   this.setState({ quantityInCart: quantity + 1 });
+    // } else {
+    //   let cart = {};
+    //   let item = this.state.item;
+    //   item.quantityInCart = quantity + 1;
+    //   cart[this.state.item.itemid] = item;
+    //   localStorage.setItem("cart", JSON.stringify(cart));
+    //   this.setState({ quantityInCart: quantity + 1 });
+    // }
   };
 
   handleSeeMoreClick() {
@@ -371,7 +379,7 @@ class Item extends Component {
   }
 
   renderPrice() {
-    if (this.state.item.sale != 0) {
+    if (this.state.item.sale !== 0) {
       return (
         <p style={{ marginTop: "5%", color: "red", fontSize: "1.8em" }}>
           ${Number(this.state.item.sale).toFixed(2)} &nbsp;&nbsp;
@@ -416,6 +424,7 @@ class Item extends Component {
               }}
             >
               <img
+                alt={this.state.item.name}
                 className="img-responsive"
                 style={{ width: "100%" }}
                 src={this.state.item.image}
@@ -482,6 +491,7 @@ class Item extends Component {
               }}
             >
               <img
+                alt={this.state.item.name}
                 className="img-responsive"
                 style={{
                   width: "100%",

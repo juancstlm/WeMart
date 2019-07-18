@@ -19,7 +19,7 @@ const CartList = ({ items, handleRemove, handleIncrease, handleDecrease }) => {
     return (
       <div>
         <div style={{ textAlign: "center", marginTop: "25%" }}>
-          <img src={itemsEmpty} style={{}} />
+          <img alt='no items' src={itemsEmpty} style={{}} />
           <h1>No Items</h1>
         </div>
       </div>

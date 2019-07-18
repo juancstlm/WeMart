@@ -175,7 +175,6 @@ class AccountSettings extends React.Component {
       TableName: "user"
     };
     // Scan the DB and get the user
-    let self = this;
     dynamodb.getItem(userParams, (err, data) => {
       if (err) {
         console.log(err, err.stack);

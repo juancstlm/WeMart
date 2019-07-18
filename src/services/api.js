@@ -260,10 +260,7 @@ export const getItemFromDB = itemID => {
 
 // given an array of item ids it returns an array of item objects
 export const getItems = items => {
-  let keys = [];
-  items.map(itemId => {
-    keys.push({ itemid: { S: itemId } });
-  });
+  let keys = items.map(itemId => marshaller.marshallItem({ itemid: String(itemId) }));
   let params = {
     RequestItems: {
       item: {
@@ -271,6 +268,8 @@ export const getItems = items => {
       }
     }
   };
+
+
 
   return new Promise((resolve, reject) => {
     dynamoDB.batchGetItem(params, (err, data) => {
@@ -316,6 +315,7 @@ export const getShoppingListItemsIds = userid => {
         reject(null);
       } else {
         let items = unmarshallObject(data.Item);
+        console.log('savings items', items);
         resolve(items.lists.shoppingList);
       }
     });
@@ -408,7 +408,7 @@ export const createUser = (email, password, firstName, lastName) => {
         console.log("error in crateUser(): ", err);
         reject(null);
       }
-      console.log('Cognito user created', result)
+      console.log("Cognito user created", result);
       let params = {
         Item: {
           userid: {
@@ -433,7 +433,7 @@ export const createUser = (email, password, firstName, lastName) => {
           console.log("error in crateUser(): ", err);
           reject(null);
         } else {
-          console.log('User added to user\'s table', data);
+          console.log("User added to user's table", data);
           resolve(result);
         }
       });
@@ -447,9 +447,7 @@ export const signIn = (email, password) => {
     Username: email,
     Password: password
   };
-  let authenticationDetails = new AuthenticationDetails(
-    authenticationData
-  );
+  let authenticationDetails = new AuthenticationDetails(authenticationData);
 
   let userPool = new CognitoUserPool(poolData);
   let userData = {
@@ -459,20 +457,21 @@ export const signIn = (email, password) => {
 
   let cognitoUser = new CognitoUser(userData);
 
-
   return new Promise((resolve, reject) => {
-    cognitoUser.authenticateUser(authenticationDetails,{onSuccess: result => {
-      resolve(result)
-      }, onFailure: err => {
-        console.error('Unable to sign in', err);
-        reject(null)
-      } })
-  })
-}
-
+    cognitoUser.authenticateUser(authenticationDetails, {
+      onSuccess: result => {
+        resolve(result);
+      },
+      onFailure: err => {
+        console.error("Unable to sign in", err);
+        reject(null);
+      }
+    });
+  });
+};
 
 // Sends a reset password link to the given email.
-export const resetPassword = email =>{
+export const resetPassword = email => {
   let userPool = new CognitoUserPool(poolData);
   let userData = {
     Username: email,
@@ -486,13 +485,13 @@ export const resetPassword = email =>{
       onSuccess: function(data) {
         // successfully initiated reset password request
         console.log("CodeDeliveryData from forgotPassword: " + data);
-        resolve(data)
+        resolve(data);
       },
 
       onFailure: function(err) {
-        console.log('Something went wrong reseting password', err)
-        reject(err)
+        console.log("Something went wrong reseting password", err);
+        reject(err);
       }
     });
-  })
-}
+  });
+};

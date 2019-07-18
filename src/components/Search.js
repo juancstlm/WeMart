@@ -14,7 +14,7 @@ const Search = ({ history, location }) => {
   }, []);
 
   const getQuery = () => {
-    let query = ''
+    let query;
     const queryParams = new URLSearchParams(location.search);
     query = queryParams.get("query")
     let special = queryParams.get("special");
