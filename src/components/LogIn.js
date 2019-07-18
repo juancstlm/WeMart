@@ -1,70 +1,31 @@
-import React, {Component} from "react";
-import {Form, TextField} from "ic-snacks";
+import React, { Component } from "react";
+import { Form, TextField } from "ic-snacks";
 import background from "../images/background.svg";
 import "../App.css";
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import wemartLogo from "../images/logo.png";
-import {toast, ToastContainer} from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {poolData} from "../services/api";
+import { signIn, resetPassword } from "../services/api";
 
 const logo = { maxWidth: "20rem" };
 const greeting = { margin: "2.5rem auto", textAlign: "center" };
-var AmazonCognitoIdentity = require("amazon-cognito-identity-js");
 
 class LogIn extends Component {
   state = {
     serverErrors: null
   };
 
-  handleFormSubmit = model => {
-    var authenticationData = {
-      Username: model.email,
-      Password: model.password
-    };
-    var authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails(
-      authenticationData
-    );
-
-    var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
-    var userData = {
-      Username: model.email,
-      Pool: userPool
-    };
-
-    // Necessary becuase the closure has no access to this.props
-    let nestedProp = this.props;
-
-    var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
-    cognitoUser.authenticateUser(authenticationDetails, {
-      onSuccess: function(result) {
+  handleFormSubmit = ({ email, password }) => {
+    signIn(email, password).then(
+      result => {
         console.log("access token + " + result.getAccessToken().getJwtToken());
-
-        // Should be home page which then checks if user is logged in
-        nestedProp.history.push("/home");
-
-        // If we want to delete users use this snippet
-        // cognitoUser.deleteUser(function(err, result) {
-        //     if (err) {
-        //         alert(err.message);
-        //         return;
-        //     }
-
-        //     alert("Deleted User")
-        // });
+        this.props.history.push("/home");
       },
-
-      onFailure: function(err) {
-        toast.warn(err.message, {
-          position: "top-center",
-          autoClose: 4000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true
-        });
+      err => {
+        alert("Error Singing In, Please Try Again.");
       }
-    });
+    );
   };
 
   handlePasswordReset = e => {
@@ -76,29 +37,14 @@ class LogIn extends Component {
       return;
     }
 
-    var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
-    var userData = {
-      Username: email,
-      Pool: userPool
-    };
-
-    // Necessary becuase the closure has no access to this.props
-    let nestedProp = this.props;
-
-    var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
-
-    cognitoUser.forgotPassword({
-      onSuccess: function(data) {
-        // successfully initiated reset password request
-        console.log("CodeDeliveryData from forgotPassword: " + data);
-
-        nestedProp.history.push({
+    resetPassword(email).then(
+      value => {
+        this.props.history.push({
           pathname: "/passwordreset",
           search: "?email=" + email
         });
       },
-
-      onFailure: function(err) {
+      err => {
         toast.warn(err.message, {
           position: "top-center",
           autoClose: 4000,
@@ -108,7 +54,7 @@ class LogIn extends Component {
           draggable: true
         });
       }
-    });
+    );
   };
 
   render() {

@@ -6,7 +6,7 @@ import HorizontalScroll from "./HorizontalScroll";
 import Counter from "./Counter";
 import {toast, ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {dynamoDB as dynamodb} from "../services/api";
+import {dynamoDB as dynamodb, poolData} from "../services/api";
 
 var AmazonCognitoIdentity = require("amazon-cognito-identity-js");
 
@@ -77,16 +77,6 @@ class Item extends Component {
   }
 
   getCurrentUser() {
-    // Get poolData
-    var poolData;
-    if (process.env.NODE_ENV === "development") {
-      poolData = require("../poolData").poolData;
-    } else {
-      var poolData = {
-        UserPoolId: process.env.REACT_APP_Auth_UserPoolId,
-        ClientId: process.env.REACT_APP_Auth_ClientId
-      };
-    }
     var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
     cognitoUser = userPool.getCurrentUser();
