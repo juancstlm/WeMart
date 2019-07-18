@@ -82,7 +82,7 @@ const ZipCodeCheck = ({ setZipCode, history }) => {
             style={txtStyle}
           />
           <button
-            class="primary"
+            className="primary"
             type="submit"
             style={{ margin: "6% 15% 3% 15%", width: "70%", height: "2.2em" }}
           >

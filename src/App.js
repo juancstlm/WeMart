@@ -19,11 +19,31 @@ const stripeKey = process.env.REACT_APP_STRIPE_API_KEY;
 const fonts = "https://s3-us-west-1.amazonaws.com/wemartimages/fonts";
 
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {stripe: null}
+  }
+
+  componentDidMount = () =>{
+    let self = this;
+    window.onload=function(){
+      if (window.Stripe) {
+        self.setState({stripe: window.Stripe(stripeKey)});
+      } else {
+        document.querySelector('#stripe-js').addEventListener('load', () => {
+          // Create Stripe instance once Stripe.js loads
+          self.setState({stripe: window.Stripe(stripeKey)});
+        });
+      }
+    }
+
+  }
+
   render() {
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <StripeProvider apiKey={stripeKey}>
+          <StripeProvider stripe={this.state.stripe}>
             <StyleRoot>
               <InstantSearch indexName='wemart' searchClient={searchClient}>
                 <Fonts assetsUrl={fonts} />
