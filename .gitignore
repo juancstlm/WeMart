@@ -25,3 +25,7 @@ yarn-error.log*
 db.js
 poolData.js
 stripeKey.js
+
+src/\.env
+
+\.env

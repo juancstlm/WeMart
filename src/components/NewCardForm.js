@@ -1,10 +1,6 @@
 import React from 'react';
-import {
-    CardCVCElement, CardElement, CardExpiryElement, CardNumberElement, injectStripe,
-    PostalCodeElement
-} from 'react-stripe-elements';
+import {CardElement, injectStripe} from 'react-stripe-elements';
 import PropTypes from 'prop-types'
-import {Button} from "ic-snacks";
 
 //STYLES
 const checkoutForm = {padding:'2rem'};

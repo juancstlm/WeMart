@@ -1,44 +1,64 @@
-import React,{Component} from 'react';
-import { withRouter } from 'react-router-dom';
+import React from "react";
+import {withRouter} from "react-router-dom";
+import {PropTypes} from "prop-types";
+import {LoadingBox} from "ic-snacks";
+import "./departmentcard.css"
 
-class DepartmentCard extends Component {
-  constructor(props) {
-    super(props)
+const DepartmentCard = ({ history, department, onClick, loading }) => {
+  const gridItem = {
+    borderRadius: "10px",
+    fontSize: "1.2em",
+    textAlign: "center",
+    marginBottom: "5vw",
+    height: "minmax(150px, 1fr)",
+    overflow: "hidden",
+    cursor: "pointer"
+  };
 
+  const gridItemLoading = {
+    borderRadius: "10px",
+    fontSize: "1.2em",
+    marginBottom: "5vw",
+    height: "minmax(150px, 1fr)",
+    overflow: "hidden",
   }
 
-  handleClick(dep) {
-  	this.props.history.push({
-		pathname: 'search',
-		search: '?query='+dep+'&special=true'
-	})
-  }
+  const webkitEllipsis = {
+    display: "-webkit-box",
+    webkitLineClamp: "1",
+    position: 'absolute',
+    fontweight: 600,
+    bottom: 0,
+    width: '100%',
+    margin: '8px auto',
+    webkitBoxOrient: "vertical",
+    overflow: "hidden"
+  };
 
-  render() {
-    var dept = this.props.department
-    const gridItem = {
-		  border: '1px solid #d3d3d3',
-		  borderRadius: '10px',
-		  fontSize: '1.4em',
-		  textAlign: 'center',
-		  cursor: 'pointer',
-		  marginBottom: '25px',
-	}
+  const loadingBox = (
+    <div style={gridItemLoading}>
+      <LoadingBox background={"light"} shape={"square"} size={200}/>
+    </div>
+  );
 
-	const webkitEllipsis = {
-		display: '-webkit-box',
-		webkitLineClamp: '1',
-		webkitBoxOrient: 'vertical',
-		overflow: 'hidden'
-  	}
+  const card = (
+    <div className={"wmrt-DepartmentCard-gridItem"} onClick={onClick}>
+      <img
+        alt={department.image}
+        src={department.image}
+        style={{ width: "80%", marginLeft: "20%", borderRadius: "0 10px 0 0" }}
+      />
+      <span style={webkitEllipsis}>{department.departmentid}</span>
+    </div>
+  );
 
-    return(
-      	<div style={gridItem} onClick={() => this.handleClick(dept.name)} >
-				<img src={dept.image} style={{width: '80%', marginLeft:'20%', borderRadius: '0 10px 0 0'}} />
-			     <span style={webkitEllipsis}>{dept.name}</span>
-		</div>
-    );
-  }
-}
+  return loading ? loadingBox : card;
+};
 
 export default withRouter(DepartmentCard);
+
+DepartmentCard.propTypes = {
+  department: PropTypes.object.isRequired,
+  onClick: PropTypes.func,
+  loading: PropTypes.boolean
+};

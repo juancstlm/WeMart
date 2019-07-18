@@ -1,7 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Column, Grid, Row} from "ic-snacks";
-import {StyleRoot} from "radium";
 
 const columnStyles = {display:'inline-block', margin:'.5rem', width:'4rem'};
 

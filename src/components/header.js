@@ -1,14 +1,15 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import logo from "../images/logo.png";
-import { withRouter } from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group"; // ES6
 import "./header.css";
-import Cart from "./Cart";
-import {
-  CognitoUserAttribute,
-  CognitoUserPool
-} from "amazon-cognito-identity-js";
-import { Button, Icon } from "ic-snacks";
+import Cart from "./Cart/Cart";
+import {Icon} from "ic-snacks";
+import {poolData} from "../services/api";
+import Autocomplete from "./common/Autocomplete";
+import {connect} from "react-redux";
+import {getZipCode} from "../redux/selectors";
+import {Overlay} from "./common/overlay/overlay";
 
 //Styles
 const astext = {
@@ -44,16 +45,6 @@ const pillsLi = {
   textAlign: "center"
 };
 
-const searchBtn = {
-  position: "absolute",
-  backgroundColor: "#D30707",
-  top: "0",
-  right: "0",
-  zIndex: "2",
-  height: "34px",
-  width: "50px"
-};
-
 const mobileNav = {
   margin: "0 auto",
   padding: "0",
@@ -81,9 +72,7 @@ var AmazonCognitoIdentity = require("amazon-cognito-identity-js");
 
 var zip;
 var cognitoUser;
-var query;
-
-var query;
+let query = "";
 
 class Header extends Component {
   constructor(props) {
@@ -94,21 +83,8 @@ class Header extends Component {
       cartClicked: false,
       isLoggedIn: false
     };
-
-    this.props.history.listen((location, action) => {
-      setTimeout(
-        function() {
-          this.getSearchValue();
-        }.bind(this),
-        100
-      );
-    });
-
-    this.handleSearch = this.handleSearch.bind(this);
-    this.handleSearchChange = this.handleSearchChange.bind(this);
     this.getCurrentUser();
     this.checkZip();
-    this.getSearchValue();
     this.handleSignOut = this.handleSignOut.bind(this);
   }
 
@@ -135,16 +111,6 @@ class Header extends Component {
     this.setState({ width: window.innerWidth });
   };
 
-  getSearchValue() {
-    if (this.props.location !== undefined) {
-      const queryParams = new URLSearchParams(this.props.location.search);
-      let special = queryParams.get("special");
-      if (special != "true") {
-        query = queryParams.get("query");
-      }
-    }
-  }
-
   checkZip() {
     if (localStorage.getItem("zip") == null) {
       if (cognitoUser === null) {
@@ -160,47 +126,18 @@ class Header extends Component {
 
   getCurrentUser() {
     // Get poolData
-    var poolData;
-    if (process.env.NODE_ENV === "development") {
-      poolData = require("../poolData").poolData;
-    } else {
-      var poolData = {
-        UserPoolId: process.env.REACT_APP_Auth_UserPoolId,
-        ClientId: process.env.REACT_APP_Auth_ClientId
-      };
-    }
     var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
     cognitoUser = userPool.getCurrentUser();
   }
 
-  handleSearch(event) {
-    //search logic
-    event.preventDefault();
-    this.props.history.push({
-      pathname: "search",
-      search: "?query=" + query
-    });
-  }
-
-  handleSearchChange(event) {
-    query = event.target.value;
-    this.setState({ value: event.target.value });
-  }
-
   showCart = () => {
-    //when cart button is clicked
-    console.log("cart is clicked");
     const bool = !this.state.cartClicked;
     this.setState({ cartClicked: bool });
-    var body = document.querySelector("#pageBody");
-    body.classList.add("overlay");
   };
 
-  closeCart = cartClicked => {
-    this.setState({ cartClicked });
-    var body = document.querySelector("#pageBody");
-    body.classList.remove("overlay");
+  closeCart = () => {
+    this.setState({ cartClicked: false });
   };
 
   handleDepartments = e => {
@@ -297,7 +234,7 @@ class Header extends Component {
             aria-expanded="true"
             style={{ backgroundColor: "#D30707" }}
           >
-            <i class="fas fa-user" />
+            <i className="fas fa-user" />
             <span className="caret" />
           </button>
           <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
@@ -359,6 +296,7 @@ class Header extends Component {
               zIndex: "10"
             }}
           >
+            <Overlay active={this.state.cartClicked} onClick={this.closeCart}/>
             <div className="row" style={{ marginTop: "3%" }}>
               <div className="container-fluid" style={center}>
                 <div style={{ paddingLeft: "0" }} className="col-xs-2">
@@ -393,29 +331,9 @@ class Header extends Component {
               <div className="container-fluid">
                 <div
                   className="form-group"
-                  style={{ position: "relative", margin: "15px 0" }}
+                  style={{ position: "relative", margin: "15px 0 0 0" }}
                 >
-                  <form
-                    className="form-inline form-horizontal"
-                    onSubmit={this.handleSearch}
-                  >
-                    <input
-                      name="search"
-                      value={query}
-                      onChange={this.handleSearchChange}
-                      type="text"
-                      placeholder="Search"
-                      className="form-control"
-                      style={{ width: "100%", fontSize: "16px" }}
-                    />
-                    <button
-                      type="submit"
-                      className="btn btn-danger btn-sm"
-                      style={searchBtn}
-                    >
-                      <i className="fas fa-search" />
-                    </button>
-                  </form>
+                  <Autocomplete />
                 </div>
               </div>
             </div>
@@ -486,6 +404,7 @@ class Header extends Component {
               borderRadius: "0"
             }}
           >
+            <Overlay active={this.state.cartClicked} onClick={this.closeCart}/>
             <div className="container-fluid" style={center}>
               <div
                 className="navbar-header"
@@ -493,6 +412,7 @@ class Header extends Component {
               >
                 <a className="navbar-brand" style={center} href="/home">
                   <img
+                    alt={"logo"}
                     src={logo}
                     style={{ height: "35px", backgroundColor: "clear" }}
                   />
@@ -503,32 +423,7 @@ class Header extends Component {
                 className="nav navbar-nav"
                 style={{ width: "55%", marginLeft: "25px" }}
               >
-                <form
-                  className="form-inline"
-                  onSubmit={this.handleSearch}
-                  style={{ position: "relative", margin: "15px 0" }}
-                >
-                  <input
-                    name="search"
-                    value={query}
-                    onChange={this.handleSearchChange}
-                    type="text"
-                    placeholder="Search"
-                    className="form-control"
-                    style={{ width: "80%" }}
-                  />
-                  <button
-                    type="submit"
-                    className="primary"
-                    style={{
-                      height: "34px",
-                      width: "44px",
-                      borderRadius: "4px"
-                    }}
-                  >
-                    <i className="fas fa-search" />
-                  </button>
-                </form>
+                <Autocomplete />
               </ul>
 
               <ul
@@ -542,7 +437,7 @@ class Header extends Component {
                     onClick={this.handleZipClick}
                   >
                     <Icon name="locationMarkerFilled" /> &nbsp;
-                    {zip}
+                    {this.props.zipCode}
                   </button>
                 </li>
 
@@ -610,4 +505,6 @@ class Header extends Component {
     }
   }
 }
-export default withRouter(Header);
+export default connect(state => ({
+  zipCode: getZipCode(state)
+}))(withRouter(Header));

@@ -1,0 +1,116 @@
+.searchBox {
+  margin: auto;
+  position: relative;
+    display: flex;
+    justify-content: center;
+}
+.autocomplete {
+  position: absolute;
+  display: block;
+  z-index: 100;
+  margin: 8px auto;
+  border-radius: 6px;
+  -moz-box-shadow: 3px 3px 5px 6px #ccc;
+  -webkit-box-shadow: 3px 3px 5px 6px #ccc;
+  box-shadow: 0 4px 8px 0 hsla(0, 0%, 61%, 0.75);
+  background-color: white;
+  padding: 4px 0;
+  width: 90%;
+    top: 60px;
+}
+.suggestion {
+  padding: 8px 20px;
+  border-bottom: solid 1px #f7f7ff;
+  cursor: pointer;
+}
+
+.suggestion:nth-child(n + 6) {
+  display: none;
+}
+
+.suggestion:nth-child(5) {
+  border-bottom: none;
+}
+
+.suggestion:hover {
+  background-color: rgb(247, 247, 247);
+}
+
+.hit {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.primary-attribute {
+  display: block;
+  font-weight: 600;
+  font-size: 1.2em;
+}
+.image-attribute {
+  max-width: 100%;
+  height: auto;
+  width: 40px;
+  min-height: 40px;
+  padding-top: 5px;
+  margin-right: 10px;
+}
+
+.ais-SearchBox {
+  height: 50px;
+  margin: 10px auto;
+  min-width: 90%;
+}
+
+@media (max-width: 902px) {
+  .ais-SearchBox {
+    min-width: 100%;
+  }
+    .autocomplete{
+        min-width: 100%;
+    }
+}
+
+.ais-SearchBox-form:focus-within {
+  box-shadow: 0 2px 17px 0 rgba(0, 0, 0, 0.14);
+}
+
+.ais-SearchBox-form {
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.ais-SearchBox-submit {
+  padding: 0 5px 0 20px;
+  background-color: white;
+  border-radius: 8px 0 0 8px;
+  border: none;
+  order: -1;
+}
+
+.ais-SearchBox-input {
+  background-color: white;
+  height: 50px;
+  border-radius: 0 8px 8px 0;
+  padding: 0 28px 0 10px;
+  border: none;
+  color: rgba(33, 36, 61, 0.8);
+  width: 100%;
+  font-size: 1.2em;
+}
+.ais-SearchBox-input:focus {
+  outline: none;
+}
+.ais-SearchBox-reset {
+  border: none;
+  background-color: #ffffff00;
+  padding: 0 20px 0 5px;
+}
