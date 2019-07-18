@@ -9,7 +9,6 @@ import CreditCard from "./CreditCard";
 import OrderItems from "./OrderItems";
 import NewCardForm from "./NewCardForm";
 import {CognitoUserPool} from "amazon-cognito-identity-js";
-import AWS from "aws-sdk";
 import Footer from "./Footer";
 
 import {toast, ToastContainer} from "react-toastify";
@@ -176,7 +175,7 @@ export default class Checkout extends React.Component {
               ]
             });
             //TODO calculate using sale price
-            var itemTotalPrice = sale != 0 ? sale : price;
+            let itemTotalPrice = sale !== 0 ? sale : price;
             itemTotalPrice = itemTotalPrice * item.quantityInCart;
             this.setState({
               subtotal: this.state.subtotal + Number(itemTotalPrice),

@@ -1,9 +1,9 @@
-import React, {Component} from "react";
-import {Form, TextField} from "ic-snacks";
+import React, { Component } from "react";
+import { Form, TextField, Link } from "ic-snacks";
 import background from "../images/background.svg";
 import "../App.css";
-import {withRouter} from "react-router-dom";
-import {poolData} from "../services/api";
+import { withRouter } from "react-router-dom";
+import { poolData } from "../services/api";
 
 var AmazonCognitoIdentity = require("amazon-cognito-identity-js");
 var email;
@@ -129,7 +129,16 @@ class Confirm extends Component {
             >
               We send the confirmation code to {email}. Please check your spam
               folder. If you did not receive anything we can{" "}
-              <a onClick={this.handleClickOnResend}>resend the code</a>.
+              <Link
+                href="/#"
+                onClick={(e, props) => {
+                  e.preventDefault();
+                  this.handleClickOnResend();
+                }}
+              >
+                resend the code
+              </Link>
+              .
             </p>
             <TextField
               floatingLabelText="Confirmation Code"
@@ -140,7 +149,7 @@ class Confirm extends Component {
               style={txtStyle}
             />
             <button
-              class="primary"
+              className="primary"
               type="submit"
               style={{ margin: "6% 15% 3% 15%", width: "70%", height: "2.2em" }}
             >

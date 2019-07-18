@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, TextField } from "ic-snacks";
+import { Form, TextField, Link } from "ic-snacks";
 import background from "../images/background.svg";
 import "../App.css";
 import { withRouter } from "react-router-dom";
@@ -133,7 +133,15 @@ class LogIn extends Component {
             Don't have an Account? <a href="/signup">Sign Up</a> <br />
             <br />
             Forgot your password?{" "}
-            <a onClick={this.handlePasswordReset}>Reset It</a>
+            <Link
+              href={"/#"}
+              onClick={(e, props) => {
+                e.preventDefault();
+                this.handlePasswordReset();
+              }}
+            >
+              Reset It
+            </Link>
           </p>
         </div>
         <ToastContainer />
