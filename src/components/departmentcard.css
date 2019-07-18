@@ -1,0 +1,35 @@
+.wmrt-DepartmentCard-gridItem{
+    border-radius: 10px;
+    font-size: 1.2em;
+    font-weight: 600;
+    text-align: center;
+    margin: 1.5vh;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    max-width: 20vw;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.09);
+    transition: all ease-in-out .2s;
+}
+.wmrt-DepartmentCard-gridItem:hover{
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
+    /*transition: all ease-in-out .02s;*/
+}
+
+@media (max-width: 902px) {
+    .wmrt-DepartmentCard-gridItem{
+        max-width: 40vw;
+        min-width: 150px;
+    }
+}
+
+/*DEPARTMENTS*/
+.wmrt-Departments-container{
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    /*width: 90%;*/
+}

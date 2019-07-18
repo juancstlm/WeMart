@@ -2,14 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import "./checkoutbutton.css";
 
-const CheckOutButton = ({ total, savingsTotal }) => {
+const CheckOutButton = ({ total, savingsTotal, onClick }) => {
   const formattedTotal = total.toFixed(2);
   const formattedSavingsTotal = savingsTotal.toFixed(2);
 
   return (
     <div className={"wmrt-CheckoutButton"}>
       <div className={"wmrt-CheckoutButton-button"}>
-        <a>
+        <a onClick={onClick}>
           <div className={"wmrt-CheckoutButton-text"}>Checkout</div>
           <div className={"wmrt-CheckoutButton-totalContainer"}>
             <div className={"wmrt-CheckoutButton-total"}>

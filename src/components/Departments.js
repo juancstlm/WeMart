@@ -5,6 +5,7 @@ import Footer from "./Footer";
 import {getDepartments} from "../services/api";
 import DepartmentCard from "./DepartmentCard";
 import PropTypes from "prop-types";
+// import './departmentcard.css'
 
 const Departments = ({ history, initialLoad }) => {
   const [departments, setDepartments] = useState(
@@ -42,11 +43,11 @@ const Departments = ({ history, initialLoad }) => {
   };
 
   const gridContainer = {
-    display: "grid",
-    gridTemplateColumns: "repeat( auto-fit, minmax(150px, 1fr) )",
-    gridColumnGap: "5%",
-    margin: "5%",
+    display: "flex",
     marginBottom: "0",
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignContent: 'center',
     width: "90%"
   };
 
@@ -54,7 +55,7 @@ const Departments = ({ history, initialLoad }) => {
     <div>
       <Header />
       <div id="pageBody">
-        <div style={gridContainer}>{renderDepartments(departments)}</div>
+        <div className={"wmrt-Departments-container"}>{renderDepartments(departments)}</div>
       </div>
       <Footer />
     </div>

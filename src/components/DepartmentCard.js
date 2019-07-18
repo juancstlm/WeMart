@@ -2,10 +2,10 @@ import React from "react";
 import {withRouter} from "react-router-dom";
 import {PropTypes} from "prop-types";
 import {LoadingBox} from "ic-snacks";
+import "./departmentcard.css"
 
 const DepartmentCard = ({ history, department, onClick, loading }) => {
   const gridItem = {
-    border: "1.5px solid gray",
     borderRadius: "10px",
     fontSize: "1.2em",
     textAlign: "center",
@@ -26,6 +26,11 @@ const DepartmentCard = ({ history, department, onClick, loading }) => {
   const webkitEllipsis = {
     display: "-webkit-box",
     webkitLineClamp: "1",
+    position: 'absolute',
+    fontweight: 600,
+    bottom: 0,
+    width: '100%',
+    margin: '8px auto',
     webkitBoxOrient: "vertical",
     overflow: "hidden"
   };
@@ -37,7 +42,7 @@ const DepartmentCard = ({ history, department, onClick, loading }) => {
   );
 
   const card = (
-    <div style={gridItem} onClick={onClick}>
+    <div className={"wmrt-DepartmentCard-gridItem"} onClick={onClick}>
       <img
         alt={department.image}
         src={department.image}
