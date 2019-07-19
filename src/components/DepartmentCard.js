@@ -5,15 +5,6 @@ import {LoadingBox} from "ic-snacks";
 import "./departmentcard.css"
 
 const DepartmentCard = ({ history, department, onClick, loading }) => {
-  const gridItem = {
-    borderRadius: "10px",
-    fontSize: "1.2em",
-    textAlign: "center",
-    marginBottom: "5vw",
-    height: "minmax(150px, 1fr)",
-    overflow: "hidden",
-    cursor: "pointer"
-  };
 
   const gridItemLoading = {
     borderRadius: "10px",

@@ -16,8 +16,8 @@ const cardElement = {
         color: '#9e2146',
         border:'1px solid grey'
     }};
-const cardElementDiv = {border:'1px solid', padding:'1rem', borderRadius:'.6rem',
-    maxHeight:'6rem'};
+// const cardElementDiv = {border:'1px solid', padding:'1rem', borderRadius:'.6rem',
+//     maxHeight:'6rem'};
 
 const handleBlur = () => {
     console.log('[blur]');
@@ -25,9 +25,9 @@ const handleBlur = () => {
 const handleChange = change => {
     console.log('[change]', change);
 };
-const handleClick = () => {
-    console.log('[click]');
-};
+// const handleClick = () => {
+//     console.log('[click]');
+// };
 const handleFocus = () => {
     console.log('[focus]');
 };

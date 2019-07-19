@@ -9,13 +9,12 @@ import CreditCard from "./CreditCard";
 import OrderItems from "./OrderItems";
 import NewCardForm from "./NewCardForm";
 import {CognitoUserPool} from "amazon-cognito-identity-js";
-import AWS from "aws-sdk";
 import Footer from "./Footer";
 
 import {toast, ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import {dynamoDB as dynamodb, poolData} from "../services/api";
+import {dynamoDB as dynamodb, poolData, lambda} from "../services/api";
 
 const stripeKey = process.env.REACT_APP_STRIPE_API_KEY;
 const tax = 0.0925;
@@ -176,7 +175,7 @@ export default class Checkout extends React.Component {
               ]
             });
             //TODO calculate using sale price
-            var itemTotalPrice = sale != 0 ? sale : price;
+            let itemTotalPrice = sale !== 0 ? sale : price;
             itemTotalPrice = itemTotalPrice * item.quantityInCart;
             this.setState({
               subtotal: this.state.subtotal + Number(itemTotalPrice),
@@ -265,18 +264,6 @@ export default class Checkout extends React.Component {
   }
 
   setPaymentSources(email) {
-    var lambda;
-    if (process.env.NODE_ENV === "development") {
-      lambda = new AWS.Lambda(require("../db").lambda);
-    } else {
-      lambda = new AWS.Lambda({
-        region: "us-west-1",
-        credentials: {
-          accessKeyId: process.env.REACT_APP_DB_accessKeyId,
-          secretAccessKey: process.env.REACT_APP_DB_secretAccessKey
-        }
-      });
-    }
     var payLoad = {
       stripeEmail: email
     };
@@ -429,21 +416,10 @@ export default class Checkout extends React.Component {
     });
   }
 
-  //** This method uses AWS lanbda fucntion to charge the user using stripe source */
+  //** This method uses AWS lambda function to charge the user using stripe source */
+  //TODO move this function to the API.js file
   charge() {
-    var lambda;
-    if (process.env.NODE_ENV === "development") {
-      lambda = new AWS.Lambda(require("../db").lambda);
-    } else {
-      lambda = new AWS.Lambda({
-        region: "us-west-1",
-        credentials: {
-          accessKeyId: process.env.REACT_APP_DB_accessKeyId,
-          secretAccessKey: process.env.REACT_APP_DB_secretAccessKey
-        }
-      });
-    }
-    var payLoad;
+    let payLoad;
     if (this.state.customerid) {
       payLoad = {
         stripeSource: this.state.source,

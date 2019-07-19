@@ -10,11 +10,9 @@ const Search = ({ history, location }) => {
   const [finishedLoading, setFinishedLoading] = useState(false);
 
   useEffect(() => {
-    getQuery();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
 
-  const getQuery = () => {
-    let query = ''
+    let query;
     const queryParams = new URLSearchParams(location.search);
     query = queryParams.get("query")
     let special = queryParams.get("special");
@@ -37,7 +35,33 @@ const Search = ({ history, location }) => {
         setFinishedLoading(true);
       });
     }
-  };
+  }, [location]);
+
+  // const getQuery = () => {
+  //   let query;
+  //   const queryParams = new URLSearchParams(location.search);
+  //   query = queryParams.get("query")
+  //   let special = queryParams.get("special");
+  //
+  //   if (special === "true") {
+  //     if (query === "savings") {
+  //       getSavingsItems().then(result => {
+  //         setItems(result);
+  //         setFinishedLoading(true);
+  //       });
+  //     } else {
+  //       getDepartmentItems(query).then(result => {
+  //         setItems(result);
+  //         setFinishedLoading(true);
+  //       });
+  //     }
+  //   } else {
+  //     searchItems(query).then(result => {
+  //       setItems(result);
+  //       setFinishedLoading(true);
+  //     });
+  //   }
+  // };
 
   const renderItems = () => {
     if (items.length !== 0) {

@@ -10,13 +10,8 @@ import {Provider} from "react-redux";
 import store, {persistor} from "./redux/store";
 import "./App.css";
 import {PersistGate} from "redux-persist/integration/react";
-import algoliasearch from "algoliasearch/lite";
 import {InstantSearch} from "react-instantsearch-dom";
-
-const searchClient = algoliasearch(
-  "8AHZ7T8E5B",
-  "c02a4755e9f85983a9daaeb4db0a16ee"
-);
+import {searchClient} from "./services/api";
 
 themer.themeConfig = wemartTheme; //IC-Snacks theme for WeMart
 const stripeKey = process.env.REACT_APP_STRIPE_API_KEY;
@@ -24,11 +19,31 @@ const stripeKey = process.env.REACT_APP_STRIPE_API_KEY;
 const fonts = "https://s3-us-west-1.amazonaws.com/wemartimages/fonts";
 
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {stripe: null}
+  }
+
+  componentDidMount = () =>{
+    let self = this;
+    window.onload=function(){
+      if (window.Stripe) {
+        self.setState({stripe: window.Stripe(stripeKey)});
+      } else {
+        document.querySelector('#stripe-js').addEventListener('load', () => {
+          // Create Stripe instance once Stripe.js loads
+          self.setState({stripe: window.Stripe(stripeKey)});
+        });
+      }
+    }
+
+  }
+
   render() {
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <StripeProvider apiKey={stripeKey}>
+          <StripeProvider stripe={this.state.stripe}>
             <StyleRoot>
               <InstantSearch indexName='wemart' searchClient={searchClient}>
                 <Fonts assetsUrl={fonts} />

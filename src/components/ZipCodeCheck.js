@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import {Form, TextField} from "ic-snacks";
 import background from "../images/background.svg";
 import "../App.css";
@@ -13,7 +13,6 @@ const logo = { maxWidth: "20rem" };
 const greeting = { margin: "2.5rem auto", textAlign: "center" };
 
 const ZipCodeCheck = ({ setZipCode, history }) => {
-  const [serverErrors, setServerErrors] = useState(null);
 
   const handleFormSubmit = model => {
     if (model.zip > 90000 && model.zip < 96163) {
@@ -60,7 +59,7 @@ const ZipCodeCheck = ({ setZipCode, history }) => {
         }}
       >
         <div style={greeting}>
-          <img src={wemartLogo} style={logo} />
+          <img alt="logo" src={wemartLogo} style={logo} />
           <h3 style={{ margin: "1rem 2rem" }}>
             Groceries delivered to your door
           </h3>
@@ -68,7 +67,6 @@ const ZipCodeCheck = ({ setZipCode, history }) => {
         </div>
         <Form
           onSubmit={handleFormSubmit}
-          serverErrors={serverErrors}
           formProps={{}}
         >
           <TextField
@@ -82,7 +80,7 @@ const ZipCodeCheck = ({ setZipCode, history }) => {
             style={txtStyle}
           />
           <button
-            class="primary"
+            className="primary"
             type="submit"
             style={{ margin: "6% 15% 3% 15%", width: "70%", height: "2.2em" }}
           >

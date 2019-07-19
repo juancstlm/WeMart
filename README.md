@@ -1,4 +1,5 @@
 # WeMart
+[![Build Status](https://travis-ci.com/juancstlm/WeMart.svg?branch=master)](https://travis-ci.com/juancstlm/WeMart)
 
 This project was part of the project work done in CmpE 133 at SJSU during spring 2018. If you like to have a look at the project in action, please go here: https://wemart-133.herokuapp.com
 

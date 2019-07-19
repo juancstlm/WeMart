@@ -1,136 +1,31 @@
-import React, {Component} from "react";
-import {Form, TextField} from "ic-snacks";
+import React, { Component } from "react";
+import { Form, TextField } from "ic-snacks";
 import background from "../images/background.svg";
 import "../App.css";
-import {withRouter} from "react-router-dom";
-import {DynamoDB} from "aws-sdk/index";
+import { withRouter } from "react-router-dom";
 import wemartLogo from "../images/logo.png";
-import {toast, ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import AWS from "aws-sdk";
-import {poolData} from "../services/api";
+import { createUser } from "../services/api";
 
 const logo = { maxWidth: "200px", padding: "1.5rem" };
 const greeting = { margin: "2.5rem auto", textAlign: "center" };
-var AmazonCognitoIdentity = require("amazon-cognito-identity-js");
 
 class SignUp extends Component {
   state = {
     serverErrors: null
   };
 
-  handleFormSubmit = model => {
-    // Get the dynamoDB database
-    var dynamodb;
-    if (process.env.NODE_ENV === "development") {
-      dynamodb = require("../db").db;
-    } else {
-      dynamodb = new DynamoDB({
-        region: "us-west-1",
-        credentials: {
-          accessKeyId: process.env.REACT_APP_DB_accessKeyId,
-          secretAccessKey: process.env.REACT_APP_DB_secretAccessKey
-        }
+  handleFormSubmit = ({ firstName, lastName, email, password }) => {
+    createUser(email, password, firstName, lastName).then((result)=>{
+      this.props.history.push({
+        pathname: "/confirm",
+        search: "?email=" + email,
+        state: { password: password }
       });
-    }
-
-    var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
-
-    var attributeList = [];
-
-    var dataEmail = {
-      Name: "email",
-      Value: model.email
-    };
-    var attributeEmail = new AmazonCognitoIdentity.CognitoUserAttribute(
-      dataEmail
-    );
-    attributeList.push(attributeEmail);
-
-    // Necessary becuase the closure has no access to this.props
-    let nestedProp = this.props;
-    let self = this;
-
-    userPool.signUp(model.email, model.password, attributeList, null, function(
-      err,
-      result
-    ) {
-      if (err) {
-        toast.warn(err.message, {
-          position: "top-center",
-          autoClose: 4000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true
-        });
-        return;
-      }
-
-      var params = {
-        Item: {
-          userid: {
-            S: model.email
-          },
-          username: {
-            S: model.email
-          },
-          firstName: {
-            S: model.firstName
-          },
-          lastName: {
-            S: model.lastName
-          }
-        },
-        ReturnConsumedCapacity: "TOTAL",
-        TableName: "user"
-      };
-
-      dynamodb.putItem(params, function(err, data) {
-        if (err) {
-          alert(err.message || JSON.stringify(err));
-        } else {
-          self.createStripeCustomer(model.email);
-          console.log(data);
-
-          nestedProp.history.push({
-            pathname: "/confirm",
-            search: "?email=" + model.email,
-            state: { password: model.password }
-          });
-        }
-      });
+    }, ()=>{
+      alert("Error Creating User")
     });
   };
-
-  createStripeCustomer(email) {
-    var lambda;
-    if (process.env.NODE_ENV === "development") {
-      lambda = new AWS.Lambda(require("../db").lambda);
-    } else {
-      lambda = new AWS.Lambda({
-        region: "us-west-1",
-        credentials: {
-          accessKeyId: process.env.REACT_APP_DB_accessKeyId,
-          secretAccessKey: process.env.REACT_APP_DB_secretAccessKey
-        }
-      });
-    }
-    var payLoad = {
-      email: email
-    };
-
-    var params = {
-      FunctionName: "createCustomer",
-      Payload: JSON.stringify(payLoad)
-    };
-
-    lambda.invoke(params, function(err, data) {
-      if (err) console.log(err, err.stack);
-      // an error occurred
-      else console.log(data); // successful response
-    });
-  }
 
   render() {
     const txtStyle = {
@@ -227,15 +122,6 @@ class SignUp extends Component {
             Already have an Account? <a href="/login">Log In</a>
           </p>
         </div>
-        <ToastContainer
-          position="top-center"
-          autoClose={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnVisibilityChange
-          draggable
-        />
       </div>
     );
   }

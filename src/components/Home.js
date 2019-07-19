@@ -9,10 +9,10 @@ import {getCogtnioUser, getDepartments, getSavingsItems} from "../services/api";
 const Home = ({ history }) => {
   const [departments, setDepartments] = useState([]);
   const [savingsItems, setSavingsItems] = useState([]);
-  const [historyItems, setHistoryItems] = useState([]);
+  const [historyItems, ] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [orderHistory, setOrderHistory] = useState(new Set());
+  // const [isLoaded, setIsLoaded] = useState(false);
+  // const [orderHistory, ] = useState(new Set());
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -29,11 +29,11 @@ const Home = ({ history }) => {
     });
   }, []);
 
-  const getItemsFromDB = () => {
-    orderHistory.forEach(itemid => {
-      //TODO call getItemFrom DB on each item
-    });
-  };
+  // const getItemsFromDB = () => {
+  //   orderHistory.forEach(itemid => {
+  //     //TODO call getItemFrom DB on each item
+  //   });
+  // };
 
   const handleSeeMoreClick = link => {
     history.push("/" + link);
@@ -86,7 +86,7 @@ const Home = ({ history }) => {
         </div>
         <div style={wrapper}>
           <div>
-            <img src={itemsEmpty} style={{ maxWidth: "20%" }} />
+            <img alt={'test'} src={itemsEmpty} style={{ maxWidth: "20%" }} />
           </div>
           <h1>No Items</h1>
           <h4>

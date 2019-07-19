@@ -9,7 +9,7 @@ import {addToCart} from "../redux/actions";
 import {connect} from "react-redux";
 
 const ShoppingList = ({ addToCart, history }) => {
-  const [finishedLoading, setFinishedLoading] = useState(false);
+  const [finishedLoading,] = useState(false);
   const [items, setItems] = useState([]);
   const [userid, setUserid] = useState("");
 
@@ -83,6 +83,7 @@ const ShoppingList = ({ addToCart, history }) => {
             </p>
             <div style={{ height: "100px", width: "100px" }}>
               <img
+                alt={item.name}
                 className="img-responsive"
                 src={item.image}
                 onClick={() => handleItemClick(item)}
@@ -126,6 +127,7 @@ const ShoppingList = ({ addToCart, history }) => {
             </div>
             <div style={{ height: "150px", width: "150px" }}>
               <img
+                alt={item.name}
                 className="img-responsive"
                 src={item.image}
                 onClick={() => handleItemClick(item)}
@@ -155,7 +157,7 @@ const ShoppingList = ({ addToCart, history }) => {
   };
 
   const renderPrice = item => {
-    if (item.sale != 0) {
+    if (item.sale !== 0) {
       return (
         <p style={{ color: "#D30707", fontSize: "1.2em" }}>
           ${Number(item.sale).toFixed(2)} &nbsp;&nbsp;

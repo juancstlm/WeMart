@@ -9,7 +9,7 @@ const CheckOutButton = ({ total, savingsTotal, onClick }) => {
   return (
     <div className={"wmrt-CheckoutButton"}>
       <div className={"wmrt-CheckoutButton-button"}>
-        <a onClick={onClick}>
+        <button  onClick={onClick}>
           <div className={"wmrt-CheckoutButton-text"}>Checkout</div>
           <div className={"wmrt-CheckoutButton-totalContainer"}>
             <div className={"wmrt-CheckoutButton-total"}>
@@ -21,7 +21,7 @@ const CheckOutButton = ({ total, savingsTotal, onClick }) => {
               >{`$${formattedSavingsTotal}`}</span>
             </div>
           </div>
-        </a>
+        </button>
       </div>
     </div>
   );

@@ -1,12 +1,26 @@
-import AWS, {DynamoDB} from "aws-sdk";
-import {CognitoUserPool} from "amazon-cognito-identity-js";
-import {Marshaller} from "@aws/dynamodb-auto-marshaller";
+import AWS, { DynamoDB } from "aws-sdk";
+import {
+  CognitoUserPool,
+  CognitoUserAttribute,
+  AuthenticationDetails,
+  CognitoUser
+} from "amazon-cognito-identity-js";
+import { Marshaller } from "@aws/dynamodb-auto-marshaller";
+import algoliasearch from "algoliasearch/lite";
 
 const marshaller = new Marshaller({ unwrapNumbers: true });
+
+export const searchClient = algoliasearch(
+  process.env.REACT_APP_ALGOLIA_APP_ID,
+  process.env.REACT_APP_ALGOLIA_API_KEY
+);
 
 const ITEM_SEARCH_PARAMS = {
   TableName: "item"
 };
+
+// Gets the sales tax given a zip code
+export const getSalesTax = zipcode => 0.0925;
 
 /// AWS Services
 export const poolData = {
@@ -42,7 +56,7 @@ export const getCogtnioUser = () => {
           console.log(err);
           reject(null);
         }
-        console.log('user session', session)
+        console.log("user session", session);
         cognitoUser.getUserAttributes(function(err, result) {
           if (err) {
             console.log(err);
@@ -244,13 +258,9 @@ export const getItemFromDB = itemID => {
   });
 };
 
-
 // given an array of item ids it returns an array of item objects
 export const getItems = items => {
-  let keys = [];
-  items.map(itemId => {
-    keys.push({ itemid: { S: itemId } });
-  });
+  let keys = items.map(itemId => marshaller.marshallItem({ itemid: String(itemId) }));
   let params = {
     RequestItems: {
       item: {
@@ -259,12 +269,14 @@ export const getItems = items => {
     }
   };
 
+
+
   return new Promise((resolve, reject) => {
     dynamoDB.batchGetItem(params, (err, data) => {
       if (err) {
         alert(err.message);
         console.log(err.message);
-        reject(null)
+        reject(null);
       } else {
         let items = data.Responses.item.map(item => unmarshallObject(item));
         resolve(items);
@@ -272,7 +284,6 @@ export const getItems = items => {
     });
   });
 };
-
 
 export const removeItemFromSavedLists = (itemId, userId) => {
   let params = "";
@@ -304,12 +315,12 @@ export const getShoppingListItemsIds = userid => {
         reject(null);
       } else {
         let items = unmarshallObject(data.Item);
+        console.log('savings items', items);
         resolve(items.lists.shoppingList);
       }
     });
   });
 };
-
 
 export const updateShoppingList = (items, userid) => {
   let params = {};
@@ -350,13 +361,137 @@ export const updateShoppingList = (items, userid) => {
     dynamoDB.updateItem(params, function(err, data) {
       if (err) {
         alert(JSON.stringify(err));
-        reject(null)
+        reject(null);
       } else {
         console.log("Removed from Shopping List: " + data);
       }
     });
-  })
-}
+  });
+};
 
-// Gets the sales tax given a zip code
-export const getSalesTax = zipcode => 0.0925;
+// Creates a stripe customer with the given email.
+const createStripeCustomer = email => {
+  let payLoad = {
+    email: email
+  };
+
+  let params = {
+    FunctionName: "createCustomer",
+    Payload: JSON.stringify(payLoad)
+  };
+
+  lambda.invoke(params, function(err, data) {
+    if (err) console.log(err, err.stack);
+    // an error occurred
+    else console.log("Stripe customer successfully created", data); // successful response
+  });
+};
+
+// Creates a user and returns the cognito user attributes.
+export const createUser = (email, password, firstName, lastName) => {
+  // Get the dynamoDB database
+  let attributeList = [];
+
+  let dataEmail = {
+    Name: "email",
+    Value: email
+  };
+  let attributeEmail = new CognitoUserAttribute(dataEmail);
+  attributeList.push(attributeEmail);
+
+  return new Promise((resolve, reject) => {
+    userPool.signUp(email, password, attributeList, null, function(
+      err,
+      result
+    ) {
+      if (err) {
+        console.log("error in crateUser(): ", err);
+        reject(null);
+      }
+      console.log("Cognito user created", result);
+      let params = {
+        Item: {
+          userid: {
+            S: email
+          },
+          username: {
+            S: email
+          },
+          firstName: {
+            S: firstName
+          },
+          lastName: {
+            S: lastName
+          }
+        },
+        ReturnConsumedCapacity: "TOTAL",
+        TableName: "user"
+      };
+      createStripeCustomer(email);
+      dynamoDB.putItem(params, function(err, data) {
+        if (err) {
+          console.log("error in crateUser(): ", err);
+          reject(null);
+        } else {
+          console.log("User added to user's table", data);
+          resolve(result);
+        }
+      });
+    });
+  });
+};
+
+// Sign in a user with a given email and password
+export const signIn = (email, password) => {
+  let authenticationData = {
+    Username: email,
+    Password: password
+  };
+  let authenticationDetails = new AuthenticationDetails(authenticationData);
+
+  let userPool = new CognitoUserPool(poolData);
+  let userData = {
+    Username: email,
+    Pool: userPool
+  };
+
+  let cognitoUser = new CognitoUser(userData);
+
+  return new Promise((resolve, reject) => {
+    cognitoUser.authenticateUser(authenticationDetails, {
+      onSuccess: result => {
+        resolve(result);
+      },
+      onFailure: err => {
+        console.error("Unable to sign in", err);
+        reject(null);
+      }
+    });
+  });
+};
+
+// Sends a reset password link to the given email.
+export const resetPassword = email => {
+  let userPool = new CognitoUserPool(poolData);
+  let userData = {
+    Username: email,
+    Pool: userPool
+  };
+
+  let cognitoUser = new CognitoUser(userData);
+
+  return new Promise((resolve, reject) => {
+    cognitoUser.forgotPassword({
+      onSuccess: function(data) {
+        // successfully initiated reset password request
+        console.log("CodeDeliveryData from forgotPassword: " + data);
+        resolve(data);
+      },
+
+      onFailure: function(err) {
+        console.log("Something went wrong reseting password", err);
+        reject(err);
+      }
+    });
+  });
+};
