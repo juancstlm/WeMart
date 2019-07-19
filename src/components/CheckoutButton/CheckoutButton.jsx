@@ -37,3 +37,8 @@ CheckOutButton.propTypes = {
   /* Function to execute when button is pressed */
   onClick: PropTypes.func
 };
+
+CheckOutButton.defaultProps = {
+  total: 0,
+  savingsTotal: 0,
+}

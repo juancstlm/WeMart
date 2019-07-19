@@ -23,6 +23,7 @@
     "react-router-dom": "^4.2.2",
     "react-scripts": "3.0.1",
     "react-stripe-elements": "^1.6.0",
+    "react-test-renderer": "^16.8.6",
     "react-toastify": "^4.0.0-rc.5",
     "react-transition-group": "^2.3.0",
     "redux": "^4.0.1",
@@ -36,7 +37,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test --env=jsdom --coverage",
     "eject": "react-scripts eject"
   },
   "browserslist": {
