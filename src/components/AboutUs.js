@@ -171,7 +171,7 @@ const AboutUs = () => {
   };
 
   // const height = this.state.height;
-  var myTxt = require("../text/About.txt");
+  let myTxt = require("../text/About.txt");
 
   const title = {
     width: "100%",
@@ -189,13 +189,13 @@ const AboutUs = () => {
     marginTop: "-15px"
   };
 
-  const imageHolderSmall = {
-    overflow: "hidden",
-    height: "10em",
-    clipPath: "polygon(0% 0%, 100% 0%, 100% 60%, 50% 100%, 0% 60%)",
-    webkitClipPath: "polygon(0% 0%, 100% 0%, 100% 60%, 50% 100%, 0% 60%)",
-    marginTop: "-15px"
-  };
+  // const imageHolderSmall = {
+  //   overflow: "hidden",
+  //   height: "10em",
+  //   clipPath: "polygon(0% 0%, 100% 0%, 100% 60%, 50% 100%, 0% 60%)",
+  //   webkitClipPath: "polygon(0% 0%, 100% 0%, 100% 60%, 50% 100%, 0% 60%)",
+  //   marginTop: "-15px"
+  // };
 
   const image = {
     width: "100%"

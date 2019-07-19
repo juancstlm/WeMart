@@ -12,6 +12,7 @@
     "ic-snacks": "0.0.128",
     "lodash": "^4.17.11",
     "prop-types": "^15.7.2",
+    "radium": "^0.25.2",
     "react": "^16.8.6",
     "react-addons-css-transition-group": "^15.6.2",
     "react-bootstrap": "^0.32.1",
