@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {withRouter} from "react-router-dom";
 import Header from "./header";
 import Footer from "./Footer";
-import {getDepartments} from "../services/api";
+import {getDepartments, API} from "../services/api";
 import DepartmentCard from "./DepartmentCard";
 import PropTypes from "prop-types";
 // import './departmentcard.css'
@@ -13,8 +13,17 @@ const Departments = ({ history, initialLoad }) => {
   );
 
   useEffect(() => {
-    getDepartments().then(data => setDepartments(data));
+    // getDepartments().then(data => setDepartments(data));
+    fetchDepartments()
+    // console.log('fetchDepartmetns Promise', test)
+      // API.getDepartments(10)
   }, []);
+
+  let  fetchDepartments = async () =>{
+    // let departmets = await getDepartments();
+    // console.log('Departments with ES8', departmets)
+    setDepartments(await getDepartments())
+  }
 
   const renderDepartments = departments => {
     // Inline sort by department name
