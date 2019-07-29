@@ -19,8 +19,10 @@ const Search = ({ history, location }) => {
 
     if (special === "true") {
       if (query === "savings") {
-        setItems(getSavingsItems());
-        setFinishedLoading(true);
+        getSavingsItems().then(result=>{
+          setItems(result);
+          setFinishedLoading(true);
+        })
       } else {
         getDepartmentItems(query).then(result => {
           setItems(result);

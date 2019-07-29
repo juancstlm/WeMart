@@ -1,39 +1,50 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import HorizontalScroll from "./HorizontalScroll";
 import Header from "./header";
 import Footer from "./Footer";
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import itemsEmpty from "../images/items_empty.png";
-import {getCogtnioUser, getDepartments, getSavingsItems} from "../services/api";
+import {
+  getCogtnioUser,
+  getDepartments,
+  getSavingsItems
+} from "../services/api";
 
 const Home = ({ history }) => {
   const [departments, setDepartments] = useState([]);
   const [savingsItems, setSavingsItems] = useState([]);
-  const [historyItems, ] = useState([]);
+  const [historyItems] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   // const [isLoaded, setIsLoaded] = useState(false);
   // const [orderHistory, ] = useState(new Set());
   const [user, setUser] = useState(null);
 
-  useEffect(async () => {
-    let cognitoUser = await getCogtnioUser();
-    setUser({email: cognitoUser});
-    setIsLoggedIn(true);
+  useEffect(() => {
+    setUp();
+
     // getCogtnioUser().then(result => {
     //   setUser({ email: result });
     //   setIsLoggedIn(true);
     //   // getOrderHistory(result)
     // });
-    setDepartments(await getDepartments(10));
+
     // getDepartments(10).then(result => {
     //   setDepartments(result);
     // });
 
-    setSavingsItems(await getSavingsItems(50));
+    // setSavingsItems(await getSavingsItems(50));
     // getSavingsItems(50).then(result => {
     //   setSavingsItems(result);
     // });
   }, []);
+
+  const setUp = async () => {
+    let cognitoUser = await getCogtnioUser();
+    setUser({ email: cognitoUser });
+    setIsLoggedIn(true);
+    setDepartments(await getDepartments(10));
+    setSavingsItems(await getSavingsItems(50));
+  };
 
   // const getItemsFromDB = () => {
   //   orderHistory.forEach(itemid => {
@@ -92,7 +103,7 @@ const Home = ({ history }) => {
         </div>
         <div style={wrapper}>
           <div>
-            <img alt={'test'} src={itemsEmpty} style={{ maxWidth: "20%" }} />
+            <img alt={"test"} src={itemsEmpty} style={{ maxWidth: "20%" }} />
           </div>
           <h1>No Items</h1>
           <h4>
