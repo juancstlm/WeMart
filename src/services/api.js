@@ -46,6 +46,20 @@ export const lambda = new AWS.Lambda({
 
 export const userPool = new CognitoUserPool(poolData);
 
+export let API = {
+  getDepartments: async (limit) => {
+    const params = {
+      TableName: "department",
+      Limit: limit
+    };
+    let departments = await dynamoDB.scan(params, (err, data) =>{
+      if(err) console.error(err);
+      else return data
+    })
+    console.log("await async", departments.response);
+  }
+};
+
 // Attempts to get the current logged in cognito user's email
 export const getCogtnioUser = () => {
   return new Promise((resolve, reject) => {
@@ -260,7 +274,9 @@ export const getItemFromDB = itemID => {
 
 // given an array of item ids it returns an array of item objects
 export const getItems = items => {
-  let keys = items.map(itemId => marshaller.marshallItem({ itemid: String(itemId) }));
+  let keys = items.map(itemId =>
+    marshaller.marshallItem({ itemid: String(itemId) })
+  );
   let params = {
     RequestItems: {
       item: {
@@ -268,8 +284,6 @@ export const getItems = items => {
       }
     }
   };
-
-
 
   return new Promise((resolve, reject) => {
     dynamoDB.batchGetItem(params, (err, data) => {
@@ -315,7 +329,7 @@ export const getShoppingListItemsIds = userid => {
         reject(null);
       } else {
         let items = unmarshallObject(data.Item);
-        console.log('savings items', items);
+        console.log("savings items", items);
         resolve(items.lists.shoppingList);
       }
     });

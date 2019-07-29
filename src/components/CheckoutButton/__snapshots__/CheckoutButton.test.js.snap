@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Displays proper number formatting 1`] = `
+<div
+  className="wmrt-CheckoutButton"
+>
+  <div
+    className="wmrt-CheckoutButton-button"
+  >
+    <button>
+      <div
+        className="wmrt-CheckoutButton-text"
+      >
+        Checkout
+      </div>
+      <div
+        className="wmrt-CheckoutButton-totalContainer"
+      >
+        <div
+          className="wmrt-CheckoutButton-total"
+        >
+          <span
+            className="wmrt-CheckoutButton-total-fullPrice"
+          >
+            $19.00
+          </span>
+          <span
+            className="wmrt-CheckoutButton-total-savingsPrice"
+          >
+            $0.00
+          </span>
+        </div>
+      </div>
+    </button>
+  </div>
+</div>
+`;
+
+exports[`renders correctly 1`] = `
+<div
+  className="wmrt-CheckoutButton"
+>
+  <div
+    className="wmrt-CheckoutButton-button"
+  >
+    <button>
+      <div
+        className="wmrt-CheckoutButton-text"
+      >
+        Checkout
+      </div>
+      <div
+        className="wmrt-CheckoutButton-totalContainer"
+      >
+        <div
+          className="wmrt-CheckoutButton-total"
+        >
+          <span
+            className="wmrt-CheckoutButton-total-fullPrice"
+          >
+            $19.00
+          </span>
+          <span
+            className="wmrt-CheckoutButton-total-savingsPrice"
+          >
+            $18.22
+          </span>
+        </div>
+      </div>
+    </button>
+  </div>
+</div>
+`;

@@ -14,15 +14,13 @@ const Search = ({ history, location }) => {
 
     let query;
     const queryParams = new URLSearchParams(location.search);
-    query = queryParams.get("query")
+    query = queryParams.get("query");
     let special = queryParams.get("special");
 
     if (special === "true") {
       if (query === "savings") {
-        getSavingsItems().then(result => {
-          setItems(result);
-          setFinishedLoading(true);
-        });
+        setItems(getSavingsItems());
+        setFinishedLoading(true);
       } else {
         getDepartmentItems(query).then(result => {
           setItems(result);
@@ -36,6 +34,8 @@ const Search = ({ history, location }) => {
       });
     }
   }, [location]);
+
+
 
   // const getQuery = () => {
   //   let query;
