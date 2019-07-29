@@ -20,31 +20,19 @@ const Home = ({ history }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    setUp();
-
-    // getCogtnioUser().then(result => {
-    //   setUser({ email: result });
-    //   setIsLoggedIn(true);
-    //   // getOrderHistory(result)
-    // });
-
-    // getDepartments(10).then(result => {
-    //   setDepartments(result);
-    // });
-
-    // setSavingsItems(await getSavingsItems(50));
-    // getSavingsItems(50).then(result => {
-    //   setSavingsItems(result);
-    // });
+    getCogtnioUser().then(result => {
+      setUser({ email: result });
+      setIsLoggedIn(true);
+      // getOrderHistory(result)
+    });
+    getDepartments(10).then(result => {
+      setDepartments(result);
+    });
+    getSavingsItems(50).then(result => {
+      setSavingsItems(result);
+    });
   }, []);
 
-  const setUp = async () => {
-    let cognitoUser = await getCogtnioUser();
-    setUser({ email: cognitoUser });
-    setIsLoggedIn(true);
-    setDepartments(await getDepartments(10));
-    setSavingsItems(await getSavingsItems(50));
-  };
 
   // const getItemsFromDB = () => {
   //   orderHistory.forEach(itemid => {
